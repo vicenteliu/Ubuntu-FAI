@@ -1,0 +1,46 @@
+{
+  "hardware": {
+    "vendor": "Dell",
+    "model": "OptiPlex 7090",
+    "cpu_cores": 8,
+    "memory_gb": 16,
+    "storage_gb": 512
+  },
+  "encryption": {
+    "enabled": true,
+    "algorithm": "aes-xts-plain64",
+    "key_size": 512,
+    "hash_algorithm": "sha256"
+  },
+  "packages": {
+    "apt_packages": [
+      {"name": "git", "version": "latest"},
+      {"name": "curl", "version": "latest"},
+      {"name": "vim", "version": "latest"}
+    ],
+    "snap_packages": [
+      {"name": "code", "classic": true}
+    ],
+    "custom_debs": []
+  },
+  "user": {
+    "username": "testuser",
+    "full_name": "Test User",
+    "password_hash": "$6$rounds=4096$salt$hashedpassword",
+    "create_user": true,
+    "auto_login": false,
+    "groups": ["sudo", "users"]
+  },
+  "first_boot": {
+    "enabled": true,
+    "install_packages": true,
+    "enable_services": true,
+    "scripts": []
+  },
+  "network": {
+    "configure_wifi": false,
+    "wifi_ssid": null,
+    "wifi_password": null,
+    "static_ip": false
+  }
+}

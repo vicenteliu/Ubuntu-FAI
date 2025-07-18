@@ -52,12 +52,19 @@ Ubuntu FAI Build System Docker Runner (Conda 版本)
     --output-dir DIR        指定输出目录（默认: ./output）
     --local                 使用本地 conda 环境（不使用 Docker）
 
+构建参数（传递给 build.py）:
+    --skip-downloads        跳过资产下载（使用缓存文件）
+    --skip-fai              跳过 FAI 构建过程（仅生成配置）
+    --cache-dir DIR         缓存目录路径
+    --debug                 启用调试日志
+
 示例:
-    $0 config.json.example                    # 使用示例配置构建 ISO
-    $0 --build config.json.example           # 重新构建镜像后构建
-    $0 --local config.json.example           # 使用本地 conda 环境
-    $0 --output-dir /tmp/iso config.json     # 自定义输出目录
-    $0 --debug config.json                   # 启用详细日志
+    $0 config.json.example                        # 使用示例配置构建 ISO
+    $0 --build config.json.example               # 重新构建镜像后构建
+    $0 --local config.json.example               # 使用本地 conda 环境
+    $0 --local --skip-fai config.json.example    # 本地环境，仅生成配置
+    $0 --output-dir /tmp/iso config.json         # 自定义输出目录
+    $0 --debug config.json                       # 启用详细日志
 
 注意:
     - Docker 必须已安装并运行（除非使用 --local）
@@ -108,10 +115,20 @@ while [[ $# -gt 0 ]]; do
             OUTPUT_DIR="$2"
             shift 2
             ;;
+        --skip-downloads|--skip-fai|--cache-dir)
+            # These are build.py arguments, pass them through
+            BUILD_ARGS+=("$1")
+            if [[ "$1" == "--cache-dir" && $# -gt 1 && ! "$2" =~ ^- ]]; then
+                BUILD_ARGS+=("$2")
+                shift 2
+            else
+                shift
+            fi
+            ;;
         -*)
-            log_error "未知选项: $1"
-            usage
-            exit 1
+            # Unknown options - could be build.py arguments, pass them through
+            BUILD_ARGS+=("$1")
+            shift
             ;;
         *)
             if [[ -z "$CONFIG_FILE" ]]; then
@@ -235,7 +252,12 @@ validate_config() {
 # 准备输出目录
 prepare_output_dir() {
     # 转换为绝对路径
-    OUTPUT_DIR="$(realpath -m "$OUTPUT_DIR")"
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS doesn't support -m flag
+        OUTPUT_DIR="$(cd "$(dirname "$OUTPUT_DIR")" 2>/dev/null && pwd)/$(basename "$OUTPUT_DIR")" || OUTPUT_DIR="$PWD/$OUTPUT_DIR"
+    else
+        OUTPUT_DIR="$(realpath -m "$OUTPUT_DIR")"
+    fi
     
     if [[ ! -d "$OUTPUT_DIR" ]]; then
         log_info "创建输出目录: $OUTPUT_DIR"

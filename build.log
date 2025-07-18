@@ -1,0 +1,590 @@
+2025-07-17 17:11:48,551 - __main__ - INFO - Loading configuration from config.json.example
+2025-07-17 17:11:48,553 - __main__ - ERROR - Failed to load configuration: 36 validation errors for BuildConfig
+hardware._comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Hardware-specific config...for FAI class selection', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+hardware._vendor_options
+  Extra inputs are not permitted [type=extra_forbidden, input_value=['dell', 'lenovo', 'hp', 'generic'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+hardware._target_ssd_description
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Prefer SSD drives for installation', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+hardware._disk_size_description
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Minimum disk size in GB ... use largest available)', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption._comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='LUKS full-disk encryption configuration', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption._passphrase_requirements
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Minimum 12 characters wi...complexity requirements', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption._cipher_options
+  Extra inputs are not permitted [type=extra_forbidden, input_value=['aes-xts-plain64', 'aes-..., 'twofish-xts-plain64'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption._key_size_options
+  Extra inputs are not permitted [type=extra_forbidden, input_value=[256, 512], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption._key_size_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Use 256 for Dell hardware compatibility', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+packages.deb_urls
+  Value error, Invalid .deb URL https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64: URL must point to .deb file: https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64 [type=value_error, input_value=['https://dl.google.com/l...table&os=linux-deb-x64'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/value_error
+packages._comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Software packages to install during system setup', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+packages._apt_packages_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Standard Ubuntu repository packages', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+packages._deb_urls_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Direct download URLs for .deb packages', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+packages._snap_packages_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Snap packages from Ubuntu Store', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user._comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Primary user account configuration', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user._username_requirements
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Lowercase alphanumeric w...derscores, max 32 chars', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user._password_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Will be hashed during in...n, minimum 8 characters', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user._ssh_keys_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='SSH public keys for passwordless authentication', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user._sudo_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Enable passwordless sudo...security consideration)', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+first_boot._comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='First-boot script execution configuration', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+first_boot._script_types
+  Extra inputs are not permitted [type=extra_forbidden, input_value=['automated', 'manual'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+first_boot._script_execution_order
+  Extra inputs are not permitted [type=extra_forbidden, input_value='All automated scripts ru...st, then manual scripts', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+first_boot._timeout_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Maximum time for all scr...o complete (30 minutes)', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network._comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Network configuration settings', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network._dhcp_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Use DHCP for automatic network configuration', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network._hostname_requirements
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Valid hostname format, max 63 characters', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Ubuntu FAI Build System Configuration Example', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_description
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Complete configuration t...g all available options', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_version
+  Extra inputs are not permitted [type=extra_forbidden, input_value='1.0', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_iso_label_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='ISO volume label (max 32 characters)', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_iso_filename_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Custom ISO filename (null = auto-generate)', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_auto_generated_filename_format
+  Extra inputs are not permitted [type=extra_forbidden, input_value='ubuntu-24.04-desktop-{vendor}[-encrypted].iso', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_example_configurations
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'_minimal_config': {'des...lse, 'password': None}}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_hardware_specific_notes
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'dell': {'encryption_rec...ProBook', 'EliteDesk']}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_security_considerations
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'encryption_passphrase':...s instead of passwords'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_build_process_notes
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'docker_requirements': '... depending on packages'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+2025-07-17 17:11:48,553 - __main__ - ERROR - Build failed: 36 validation errors for BuildConfig
+hardware._comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Hardware-specific config...for FAI class selection', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+hardware._vendor_options
+  Extra inputs are not permitted [type=extra_forbidden, input_value=['dell', 'lenovo', 'hp', 'generic'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+hardware._target_ssd_description
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Prefer SSD drives for installation', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+hardware._disk_size_description
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Minimum disk size in GB ... use largest available)', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption._comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='LUKS full-disk encryption configuration', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption._passphrase_requirements
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Minimum 12 characters wi...complexity requirements', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption._cipher_options
+  Extra inputs are not permitted [type=extra_forbidden, input_value=['aes-xts-plain64', 'aes-..., 'twofish-xts-plain64'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption._key_size_options
+  Extra inputs are not permitted [type=extra_forbidden, input_value=[256, 512], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption._key_size_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Use 256 for Dell hardware compatibility', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+packages.deb_urls
+  Value error, Invalid .deb URL https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64: URL must point to .deb file: https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64 [type=value_error, input_value=['https://dl.google.com/l...table&os=linux-deb-x64'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/value_error
+packages._comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Software packages to install during system setup', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+packages._apt_packages_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Standard Ubuntu repository packages', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+packages._deb_urls_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Direct download URLs for .deb packages', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+packages._snap_packages_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Snap packages from Ubuntu Store', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user._comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Primary user account configuration', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user._username_requirements
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Lowercase alphanumeric w...derscores, max 32 chars', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user._password_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Will be hashed during in...n, minimum 8 characters', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user._ssh_keys_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='SSH public keys for passwordless authentication', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user._sudo_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Enable passwordless sudo...security consideration)', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+first_boot._comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='First-boot script execution configuration', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+first_boot._script_types
+  Extra inputs are not permitted [type=extra_forbidden, input_value=['automated', 'manual'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+first_boot._script_execution_order
+  Extra inputs are not permitted [type=extra_forbidden, input_value='All automated scripts ru...st, then manual scripts', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+first_boot._timeout_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Maximum time for all scr...o complete (30 minutes)', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network._comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Network configuration settings', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network._dhcp_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Use DHCP for automatic network configuration', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network._hostname_requirements
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Valid hostname format, max 63 characters', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Ubuntu FAI Build System Configuration Example', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_description
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Complete configuration t...g all available options', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_version
+  Extra inputs are not permitted [type=extra_forbidden, input_value='1.0', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_iso_label_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='ISO volume label (max 32 characters)', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_iso_filename_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Custom ISO filename (null = auto-generate)', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_auto_generated_filename_format
+  Extra inputs are not permitted [type=extra_forbidden, input_value='ubuntu-24.04-desktop-{vendor}[-encrypted].iso', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_example_configurations
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'_minimal_config': {'des...lse, 'password': None}}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_hardware_specific_notes
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'dell': {'encryption_rec...ProBook', 'EliteDesk']}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_security_considerations
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'encryption_passphrase':...s instead of passwords'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_build_process_notes
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'docker_requirements': '... depending on packages'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+2025-07-17 17:11:48,553 - __main__ - INFO - Cleaning up temporary files...
+2025-07-17 17:11:48,554 - __main__ - ERROR - Build failed: 36 validation errors for BuildConfig
+hardware._comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Hardware-specific config...for FAI class selection', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+hardware._vendor_options
+  Extra inputs are not permitted [type=extra_forbidden, input_value=['dell', 'lenovo', 'hp', 'generic'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+hardware._target_ssd_description
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Prefer SSD drives for installation', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+hardware._disk_size_description
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Minimum disk size in GB ... use largest available)', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption._comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='LUKS full-disk encryption configuration', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption._passphrase_requirements
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Minimum 12 characters wi...complexity requirements', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption._cipher_options
+  Extra inputs are not permitted [type=extra_forbidden, input_value=['aes-xts-plain64', 'aes-..., 'twofish-xts-plain64'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption._key_size_options
+  Extra inputs are not permitted [type=extra_forbidden, input_value=[256, 512], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption._key_size_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Use 256 for Dell hardware compatibility', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+packages.deb_urls
+  Value error, Invalid .deb URL https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64: URL must point to .deb file: https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64 [type=value_error, input_value=['https://dl.google.com/l...table&os=linux-deb-x64'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/value_error
+packages._comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Software packages to install during system setup', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+packages._apt_packages_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Standard Ubuntu repository packages', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+packages._deb_urls_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Direct download URLs for .deb packages', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+packages._snap_packages_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Snap packages from Ubuntu Store', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user._comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Primary user account configuration', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user._username_requirements
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Lowercase alphanumeric w...derscores, max 32 chars', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user._password_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Will be hashed during in...n, minimum 8 characters', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user._ssh_keys_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='SSH public keys for passwordless authentication', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user._sudo_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Enable passwordless sudo...security consideration)', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+first_boot._comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='First-boot script execution configuration', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+first_boot._script_types
+  Extra inputs are not permitted [type=extra_forbidden, input_value=['automated', 'manual'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+first_boot._script_execution_order
+  Extra inputs are not permitted [type=extra_forbidden, input_value='All automated scripts ru...st, then manual scripts', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+first_boot._timeout_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Maximum time for all scr...o complete (30 minutes)', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network._comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Network configuration settings', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network._dhcp_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Use DHCP for automatic network configuration', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network._hostname_requirements
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Valid hostname format, max 63 characters', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_comment
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Ubuntu FAI Build System Configuration Example', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_description
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Complete configuration t...g all available options', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_version
+  Extra inputs are not permitted [type=extra_forbidden, input_value='1.0', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_iso_label_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='ISO volume label (max 32 characters)', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_iso_filename_note
+  Extra inputs are not permitted [type=extra_forbidden, input_value='Custom ISO filename (null = auto-generate)', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_auto_generated_filename_format
+  Extra inputs are not permitted [type=extra_forbidden, input_value='ubuntu-24.04-desktop-{vendor}[-encrypted].iso', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_example_configurations
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'_minimal_config': {'des...lse, 'password': None}}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_hardware_specific_notes
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'dell': {'encryption_rec...ProBook', 'EliteDesk']}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_security_considerations
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'encryption_passphrase':...s instead of passwords'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+_build_process_notes
+  Extra inputs are not permitted [type=extra_forbidden, input_value={'docker_requirements': '... depending on packages'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+2025-07-17 17:12:11,333 - __main__ - INFO - Loading configuration from config-clean.json
+2025-07-17 17:12:11,335 - __main__ - ERROR - Failed to load configuration: 23 validation errors for BuildConfig
+hardware.vendor
+  Input should be 'dell', 'lenovo', 'hp' or 'generic' [type=enum, input_value='Dell', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/enum
+hardware.model
+  Extra inputs are not permitted [type=extra_forbidden, input_value='OptiPlex 7090', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+hardware.cpu_cores
+  Extra inputs are not permitted [type=extra_forbidden, input_value=8, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+hardware.memory_gb
+  Extra inputs are not permitted [type=extra_forbidden, input_value=16, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+hardware.storage_gb
+  Extra inputs are not permitted [type=extra_forbidden, input_value=512, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption.passphrase
+  Field required [type=missing, input_value={'enabled': True, 'algori...sh_algorithm': 'sha256'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/missing
+encryption.algorithm
+  Extra inputs are not permitted [type=extra_forbidden, input_value='aes-xts-plain64', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption.hash_algorithm
+  Extra inputs are not permitted [type=extra_forbidden, input_value='sha256', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+packages.apt_packages.0
+  Input should be a valid string [type=string_type, input_value={'name': 'git', 'version': 'latest'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/string_type
+packages.apt_packages.1
+  Input should be a valid string [type=string_type, input_value={'name': 'curl', 'version': 'latest'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/string_type
+packages.apt_packages.2
+  Input should be a valid string [type=string_type, input_value={'name': 'vim', 'version': 'latest'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/string_type
+packages.snap_packages.0
+  Input should be a valid string [type=string_type, input_value={'name': 'code', 'classic': True}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/string_type
+packages.custom_debs
+  Extra inputs are not permitted [type=extra_forbidden, input_value=[], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user.password_hash
+  Extra inputs are not permitted [type=extra_forbidden, input_value='$6$rounds=4096$salt$hashedpassword', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user.create_user
+  Extra inputs are not permitted [type=extra_forbidden, input_value=True, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user.auto_login
+  Extra inputs are not permitted [type=extra_forbidden, input_value=False, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user.groups
+  Extra inputs are not permitted [type=extra_forbidden, input_value=['sudo', 'users'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+first_boot.install_packages
+  Extra inputs are not permitted [type=extra_forbidden, input_value=True, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+first_boot.enable_services
+  Extra inputs are not permitted [type=extra_forbidden, input_value=True, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network.configure_wifi
+  Extra inputs are not permitted [type=extra_forbidden, input_value=False, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network.wifi_ssid
+  Extra inputs are not permitted [type=extra_forbidden, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network.wifi_password
+  Extra inputs are not permitted [type=extra_forbidden, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network.static_ip
+  Extra inputs are not permitted [type=extra_forbidden, input_value=False, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+2025-07-17 17:12:11,335 - __main__ - ERROR - Build failed: 23 validation errors for BuildConfig
+hardware.vendor
+  Input should be 'dell', 'lenovo', 'hp' or 'generic' [type=enum, input_value='Dell', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/enum
+hardware.model
+  Extra inputs are not permitted [type=extra_forbidden, input_value='OptiPlex 7090', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+hardware.cpu_cores
+  Extra inputs are not permitted [type=extra_forbidden, input_value=8, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+hardware.memory_gb
+  Extra inputs are not permitted [type=extra_forbidden, input_value=16, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+hardware.storage_gb
+  Extra inputs are not permitted [type=extra_forbidden, input_value=512, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption.passphrase
+  Field required [type=missing, input_value={'enabled': True, 'algori...sh_algorithm': 'sha256'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/missing
+encryption.algorithm
+  Extra inputs are not permitted [type=extra_forbidden, input_value='aes-xts-plain64', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption.hash_algorithm
+  Extra inputs are not permitted [type=extra_forbidden, input_value='sha256', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+packages.apt_packages.0
+  Input should be a valid string [type=string_type, input_value={'name': 'git', 'version': 'latest'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/string_type
+packages.apt_packages.1
+  Input should be a valid string [type=string_type, input_value={'name': 'curl', 'version': 'latest'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/string_type
+packages.apt_packages.2
+  Input should be a valid string [type=string_type, input_value={'name': 'vim', 'version': 'latest'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/string_type
+packages.snap_packages.0
+  Input should be a valid string [type=string_type, input_value={'name': 'code', 'classic': True}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/string_type
+packages.custom_debs
+  Extra inputs are not permitted [type=extra_forbidden, input_value=[], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user.password_hash
+  Extra inputs are not permitted [type=extra_forbidden, input_value='$6$rounds=4096$salt$hashedpassword', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user.create_user
+  Extra inputs are not permitted [type=extra_forbidden, input_value=True, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user.auto_login
+  Extra inputs are not permitted [type=extra_forbidden, input_value=False, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user.groups
+  Extra inputs are not permitted [type=extra_forbidden, input_value=['sudo', 'users'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+first_boot.install_packages
+  Extra inputs are not permitted [type=extra_forbidden, input_value=True, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+first_boot.enable_services
+  Extra inputs are not permitted [type=extra_forbidden, input_value=True, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network.configure_wifi
+  Extra inputs are not permitted [type=extra_forbidden, input_value=False, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network.wifi_ssid
+  Extra inputs are not permitted [type=extra_forbidden, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network.wifi_password
+  Extra inputs are not permitted [type=extra_forbidden, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network.static_ip
+  Extra inputs are not permitted [type=extra_forbidden, input_value=False, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+2025-07-17 17:12:11,335 - __main__ - INFO - Cleaning up temporary files...
+2025-07-17 17:12:11,335 - __main__ - ERROR - Build failed: 23 validation errors for BuildConfig
+hardware.vendor
+  Input should be 'dell', 'lenovo', 'hp' or 'generic' [type=enum, input_value='Dell', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/enum
+hardware.model
+  Extra inputs are not permitted [type=extra_forbidden, input_value='OptiPlex 7090', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+hardware.cpu_cores
+  Extra inputs are not permitted [type=extra_forbidden, input_value=8, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+hardware.memory_gb
+  Extra inputs are not permitted [type=extra_forbidden, input_value=16, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+hardware.storage_gb
+  Extra inputs are not permitted [type=extra_forbidden, input_value=512, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption.passphrase
+  Field required [type=missing, input_value={'enabled': True, 'algori...sh_algorithm': 'sha256'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/missing
+encryption.algorithm
+  Extra inputs are not permitted [type=extra_forbidden, input_value='aes-xts-plain64', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+encryption.hash_algorithm
+  Extra inputs are not permitted [type=extra_forbidden, input_value='sha256', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+packages.apt_packages.0
+  Input should be a valid string [type=string_type, input_value={'name': 'git', 'version': 'latest'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/string_type
+packages.apt_packages.1
+  Input should be a valid string [type=string_type, input_value={'name': 'curl', 'version': 'latest'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/string_type
+packages.apt_packages.2
+  Input should be a valid string [type=string_type, input_value={'name': 'vim', 'version': 'latest'}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/string_type
+packages.snap_packages.0
+  Input should be a valid string [type=string_type, input_value={'name': 'code', 'classic': True}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/string_type
+packages.custom_debs
+  Extra inputs are not permitted [type=extra_forbidden, input_value=[], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user.password_hash
+  Extra inputs are not permitted [type=extra_forbidden, input_value='$6$rounds=4096$salt$hashedpassword', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user.create_user
+  Extra inputs are not permitted [type=extra_forbidden, input_value=True, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user.auto_login
+  Extra inputs are not permitted [type=extra_forbidden, input_value=False, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+user.groups
+  Extra inputs are not permitted [type=extra_forbidden, input_value=['sudo', 'users'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+first_boot.install_packages
+  Extra inputs are not permitted [type=extra_forbidden, input_value=True, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+first_boot.enable_services
+  Extra inputs are not permitted [type=extra_forbidden, input_value=True, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network.configure_wifi
+  Extra inputs are not permitted [type=extra_forbidden, input_value=False, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network.wifi_ssid
+  Extra inputs are not permitted [type=extra_forbidden, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network.wifi_password
+  Extra inputs are not permitted [type=extra_forbidden, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+network.static_ip
+  Extra inputs are not permitted [type=extra_forbidden, input_value=False, input_type=bool]
+    For further information visit https://errors.pydantic.dev/2.9/v/extra_forbidden
+2025-07-17 17:13:07,135 - __main__ - INFO - Loading configuration from config-working.json
+2025-07-17 17:13:07,136 - __main__ - ERROR - Failed to load configuration: 1 validation error for BuildConfig
+  Value error, Dell hardware may have issues with key sizes > 256 bits [type=value_error, input_value={'hardware': {'vendor': '...me': 'ubuntu-fai-test'}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/value_error
+2025-07-17 17:13:07,137 - __main__ - ERROR - Build failed: 1 validation error for BuildConfig
+  Value error, Dell hardware may have issues with key sizes > 256 bits [type=value_error, input_value={'hardware': {'vendor': '...me': 'ubuntu-fai-test'}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/value_error
+2025-07-17 17:13:07,137 - __main__ - INFO - Cleaning up temporary files...
+2025-07-17 17:13:07,137 - __main__ - ERROR - Build failed: 1 validation error for BuildConfig
+  Value error, Dell hardware may have issues with key sizes > 256 bits [type=value_error, input_value={'hardware': {'vendor': '...me': 'ubuntu-fai-test'}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/value_error
+2025-07-17 17:13:16,970 - __main__ - INFO - Loading configuration from config-working.json
+2025-07-17 17:13:16,971 - __main__ - ERROR - Failed to load configuration: 'EncryptionConfig' object has no attribute 'algorithm'
+2025-07-17 17:13:16,971 - __main__ - ERROR - Build failed: 'EncryptionConfig' object has no attribute 'algorithm'
+2025-07-17 17:13:16,971 - __main__ - INFO - Cleaning up temporary files...
+2025-07-17 17:13:16,971 - __main__ - ERROR - Build failed: 'EncryptionConfig' object has no attribute 'algorithm'
+2025-07-17 17:13:35,534 - __main__ - INFO - Loading configuration from config-working.json
+2025-07-17 17:13:35,535 - src.config.validator - WARNING - Essential desktop packages not explicitly listed: ubuntu-desktop, gdm3. These will be installed via FAI class configuration.
+2025-07-17 17:13:35,535 - __main__ - WARNING - Configuration warning: Consider using key size 512 for stronger encryption
+2025-07-17 17:13:35,535 - __main__ - WARNING - Configuration warning: First-boot execution is enabled but no scripts specified. Consider disabling first-boot or adding scripts.
+2025-07-17 17:13:35,535 - __main__ - INFO - Configuration loaded and validated successfully
+2025-07-17 17:13:35,535 - __main__ - INFO - Generating autoinstall configuration...
+2025-07-17 17:13:35,594 - __main__ - ERROR - Build failed: Failed to generate autoinstall config: Invalid YAML syntax: mapping values are not allowed here
+  in "<unicode string>", line 20, column 14:
+            dhcp6: true
+                 ^
+2025-07-17 17:13:35,594 - __main__ - INFO - Cleaning up temporary files...
+2025-07-17 17:13:35,594 - __main__ - ERROR - Build failed: Failed to generate autoinstall config: Invalid YAML syntax: mapping values are not allowed here
+  in "<unicode string>", line 20, column 14:
+            dhcp6: true
+                 ^
+2025-07-17 17:18:05,331 - __main__ - INFO - Loading configuration from /Users/bytedance/Documents/Workspace/Ubuntu-FAI/config-working.json
+2025-07-17 17:18:05,332 - src.config.validator - WARNING - Essential desktop packages not explicitly listed: ubuntu-desktop, gdm3. These will be installed via FAI class configuration.
+2025-07-17 17:18:05,332 - __main__ - WARNING - Configuration warning: Consider using key size 512 for stronger encryption
+2025-07-17 17:18:05,332 - __main__ - WARNING - Configuration warning: First-boot execution is enabled but no scripts specified. Consider disabling first-boot or adding scripts.
+2025-07-17 17:18:05,332 - __main__ - INFO - Configuration loaded and validated successfully
+2025-07-17 17:18:05,332 - __main__ - INFO - Downloading required assets...
+2025-07-17 17:18:05,332 - __main__ - ERROR - Build failed: 'PackageConfig' object has no attribute 'custom_debs'
+2025-07-17 17:18:05,332 - __main__ - INFO - Cleaning up temporary files...
+2025-07-17 17:18:05,332 - __main__ - ERROR - Build failed: 'PackageConfig' object has no attribute 'custom_debs'
+2025-07-17 17:19:09,677 - __main__ - INFO - Loading configuration from /Users/bytedance/Documents/Workspace/Ubuntu-FAI/config-working.json
+2025-07-17 17:19:09,678 - src.config.validator - WARNING - Essential desktop packages not explicitly listed: ubuntu-desktop, gdm3. These will be installed via FAI class configuration.
+2025-07-17 17:19:09,678 - __main__ - WARNING - Configuration warning: Consider using key size 512 for stronger encryption
+2025-07-17 17:19:09,678 - __main__ - WARNING - Configuration warning: First-boot execution is enabled but no scripts specified. Consider disabling first-boot or adding scripts.
+2025-07-17 17:19:09,678 - __main__ - INFO - Configuration loaded and validated successfully
+2025-07-17 17:19:09,678 - __main__ - INFO - Downloading required assets...
+2025-07-17 17:19:09,678 - __main__ - ERROR - Build failed: 'PackageConfig' object has no attribute 'custom_debs'
+2025-07-17 17:19:09,678 - __main__ - INFO - Cleaning up temporary files...
+2025-07-17 17:19:09,678 - __main__ - ERROR - Build failed: 'PackageConfig' object has no attribute 'custom_debs'

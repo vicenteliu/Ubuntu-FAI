@@ -1,0 +1,33 @@
+{
+  "hardware": {
+    "vendor": "dell",
+    "target_ssd": true,
+    "disk_size_min_gb": null
+  },
+  "encryption": {
+    "enabled": true,
+    "passphrase": "MySecureP@ssw0rd123!",
+    "cipher": "aes-xts-plain64",
+    "key_size": 256
+  },
+  "packages": {
+    "apt_packages": ["git", "curl", "vim"],
+    "deb_urls": [],
+    "snap_packages": ["code"]
+  },
+  "user": {
+    "username": "testuser",
+    "full_name": "Test User",
+    "password": "testpassword123",
+    "ssh_authorized_keys": [],
+    "sudo_nopasswd": false
+  },
+  "first_boot": {
+    "enabled": true,
+    "scripts": []
+  },
+  "network": {
+    "dhcp": true,
+    "hostname": "ubuntu-fai-test"
+  }
+}

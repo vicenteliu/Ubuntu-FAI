@@ -12,6 +12,193 @@ from .models import BuildConfig, HardwareVendor, ScriptType
 logger = logging.getLogger(__name__)
 
 
+class ValidationResult:
+    """Result of configuration validation."""
+    
+    def __init__(self, is_valid: bool, errors: List[str] = None, warnings: List[str] = None):
+        """Initialize validation result.
+        
+        Args:
+            is_valid: Whether validation passed
+            errors: List of error messages
+            warnings: List of warning messages
+        """
+        self.is_valid = is_valid
+        self.errors = errors or []
+        self.warnings = warnings or []
+    
+    def __str__(self) -> str:
+        """String representation of validation result."""
+        result = f"Validation: {'PASSED' if self.is_valid else 'FAILED'}"
+        if self.errors:
+            result += f"\nErrors:\n" + "\n".join(f"  - {error}" for error in self.errors)
+        if self.warnings:
+            result += f"\nWarnings:\n" + "\n".join(f"  - {warning}" for warning in self.warnings)
+        return result
+
+
+class ConfigValidator:
+    """Configuration validator for Ubuntu FAI build system."""
+    
+    def __init__(self):
+        """Initialize config validator."""
+        self.logger = logging.getLogger(__name__)
+    
+    def validate_config(self, config: BuildConfig) -> ValidationResult:
+        """Validate complete build configuration.
+        
+        Args:
+            config: Build configuration to validate
+            
+        Returns:
+            ValidationResult with validation status and messages
+        """
+        errors = []
+        warnings = []
+        
+        # Validate individual components
+        hardware_result = self.validate_hardware(config.hardware)
+        errors.extend(hardware_result.errors)
+        warnings.extend(hardware_result.warnings)
+        
+        encryption_result = self.validate_encryption(config.encryption)
+        errors.extend(encryption_result.errors)
+        warnings.extend(encryption_result.warnings)
+        
+        user_result = self.validate_user(config.user)
+        errors.extend(user_result.errors)
+        warnings.extend(user_result.warnings)
+        
+        packages_result = self.validate_packages(config.packages)
+        errors.extend(packages_result.errors)
+        warnings.extend(packages_result.warnings)
+        
+        network_result = self.validate_network(config.network)
+        errors.extend(network_result.errors)
+        warnings.extend(network_result.warnings)
+        
+        # Cross-component validation
+        try:
+            _validate_hardware_encryption_compatibility(config)
+            _validate_first_boot_scripts(config)
+            _validate_package_dependencies(config)
+        except ConfigValidationError as e:
+            errors.append(str(e))
+        
+        # Add recommendations as warnings
+        recommendations = validate_config_completeness(config)
+        warnings.extend(recommendations)
+        
+        is_valid = len(errors) == 0
+        return ValidationResult(is_valid, errors, warnings)
+    
+    def validate_hardware(self, hardware) -> ValidationResult:
+        """Validate hardware configuration.
+        
+        Args:
+            hardware: Hardware configuration
+            
+        Returns:
+            ValidationResult
+        """
+        errors = []
+        warnings = []
+        
+        # Check vendor
+        if hasattr(hardware, 'vendor') and hardware.vendor:
+            vendor_lower = hardware.vendor.lower()
+            if vendor_lower not in ['dell', 'lenovo', 'hp', 'generic']:
+                warnings.append(f"Unknown hardware vendor: {hardware.vendor}")
+        
+        return ValidationResult(len(errors) == 0, errors, warnings)
+    
+    def validate_encryption(self, encryption) -> ValidationResult:
+        """Validate encryption configuration.
+        
+        Args:
+            encryption: Encryption configuration
+            
+        Returns:
+            ValidationResult
+        """
+        errors = []
+        warnings = []
+        
+        if encryption.enabled:
+            # Check cipher
+            valid_ciphers = ['aes-xts-plain64', 'aes-cbc-essiv:sha256', 'serpent-xts-plain64']
+            if encryption.cipher not in valid_ciphers:
+                errors.append(f"Invalid encryption cipher: {encryption.cipher}")
+            
+            # Check key size
+            if encryption.key_size < 256:
+                errors.append(f"Encryption key size too small: {encryption.key_size} (minimum: 256)")
+            elif encryption.key_size == 256:
+                warnings.append("Consider using key size 512 for stronger encryption")
+        
+        return ValidationResult(len(errors) == 0, errors, warnings)
+    
+    def validate_user(self, user) -> ValidationResult:
+        """Validate user configuration.
+        
+        Args:
+            user: User configuration
+            
+        Returns:
+            ValidationResult
+        """
+        errors = []
+        warnings = []
+        
+        # Check reserved usernames
+        reserved_usernames = ['root', 'admin', 'administrator', 'sys', 'system']
+        if user.username.lower() in reserved_usernames:
+            errors.append(f"Reserved username not allowed: {user.username}")
+        
+        # Check password hash format
+        if hasattr(user, 'password_hash') and user.password_hash:
+            if not user.password_hash.startswith('$'):
+                errors.append("Password hash must be properly hashed (should start with $)")
+        
+        return ValidationResult(len(errors) == 0, errors, warnings)
+    
+    def validate_packages(self, packages) -> ValidationResult:
+        """Validate package configuration.
+        
+        Args:
+            packages: Package configuration
+            
+        Returns:
+            ValidationResult
+        """
+        errors = []
+        warnings = []
+        
+        # Basic validation - most package validation is done elsewhere
+        return ValidationResult(len(errors) == 0, errors, warnings)
+    
+    def validate_network(self, network) -> ValidationResult:
+        """Validate network configuration.
+        
+        Args:
+            network: Network configuration
+            
+        Returns:
+            ValidationResult
+        """
+        errors = []
+        warnings = []
+        
+        # WiFi validation
+        if hasattr(network, 'configure_wifi') and network.configure_wifi:
+            if not hasattr(network, 'wifi_ssid') or not network.wifi_ssid:
+                errors.append("WiFi enabled but no SSID provided")
+            if not hasattr(network, 'wifi_password') or not network.wifi_password:
+                errors.append("WiFi enabled but no password provided")
+        
+        return ValidationResult(len(errors) == 0, errors, warnings)
+
+
 class ConfigValidationError(Exception):
     """Custom exception for configuration validation errors."""
     
