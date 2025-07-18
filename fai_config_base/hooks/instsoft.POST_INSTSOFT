@@ -1,0 +1,60 @@
+#!/bin/bash
+# FAI hook: Post software installation
+# Executed after all packages have been installed
+
+set -euo pipefail
+
+echo "$(date): Post-installation hook starting" >> $LOGDIR/instsoft.log
+
+# Configure system services
+echo "Configuring system services..." >> $LOGDIR/instsoft.log
+
+# Enable essential services
+systemctl enable NetworkManager
+systemctl enable gdm3
+systemctl enable bluetooth
+systemctl enable cups
+
+# Configure firewall
+if command -v ufw >/dev/null 2>&1; then
+    ufw --force enable
+    echo "UFW firewall enabled" >> $LOGDIR/instsoft.log
+fi
+
+# Configure automatic updates (disabled by default)
+if [ -f /etc/apt/apt.conf.d/20auto-upgrades ]; then
+    cat > /etc/apt/apt.conf.d/20auto-upgrades << EOF
+APT::Periodic::Update-Package-Lists "0";
+APT::Periodic::Unattended-Upgrade "0";
+EOF
+    echo "Disabled automatic updates" >> $LOGDIR/instsoft.log
+fi
+
+# Hardware-specific post-installation
+case "${FAI_HARDWARE_VENDOR:-generic}" in
+    dell)
+        echo "Applying Dell-specific post-installation..." >> $LOGDIR/instsoft.log
+        # Enable Dell services if packages were installed
+        if systemctl list-unit-files | grep -q dell; then
+            systemctl enable dell-recovery || true
+        fi
+        ;;
+    lenovo)
+        echo "Applying Lenovo-specific post-installation..." >> $LOGDIR/instsoft.log
+        # Configure ThinkPad fan control
+        if [ -f /sys/devices/platform/thinkpad_acpi/fan_level ]; then
+            echo "level auto" > /proc/acpi/ibm/fan || true
+        fi
+        ;;
+    hp)
+        echo "Applying HP-specific post-installation..." >> $LOGDIR/instsoft.log
+        # Enable HP services
+        systemctl enable hplip.service || true
+        ;;
+esac
+
+# Cleanup package cache
+apt-get autoremove -y
+apt-get autoclean
+
+echo "$(date): Post-installation hook completed" >> $LOGDIR/instsoft.log

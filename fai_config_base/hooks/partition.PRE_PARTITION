@@ -1,0 +1,38 @@
+#!/bin/bash
+# FAI hook: Pre-partition setup
+# Executed before disk partitioning begins
+
+set -euo pipefail
+
+echo "$(date): Pre-partition hook starting" >> $LOGDIR/partition.log
+
+# Detect and log disk information
+echo "=== Disk Detection ===" >> $LOGDIR/partition.log
+lsblk >> $LOGDIR/partition.log
+fdisk -l >> $LOGDIR/partition.log 2>&1
+
+# Apply SSD optimizations if detected
+if [ "${SSD_OPTIMIZATIONS:-no}" = "yes" ]; then
+    echo "Applying SSD optimizations..." >> $LOGDIR/partition.log
+    
+    # Enable TRIM support
+    echo 'ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="mq-deadline"' > /etc/udev/rules.d/60-ssd-scheduler.rules
+fi
+
+# Hardware-specific pre-partition setup
+case "${FAI_HARDWARE_VENDOR:-generic}" in
+    dell)
+        echo "Applying Dell-specific partition settings..." >> $LOGDIR/partition.log
+        # Dell-specific optimizations
+        ;;
+    lenovo)
+        echo "Applying Lenovo-specific partition settings..." >> $LOGDIR/partition.log
+        # Lenovo-specific optimizations  
+        ;;
+    hp)
+        echo "Applying HP-specific partition settings..." >> $LOGDIR/partition.log
+        # HP-specific optimizations
+        ;;
+esac
+
+echo "$(date): Pre-partition hook completed" >> $LOGDIR/partition.log

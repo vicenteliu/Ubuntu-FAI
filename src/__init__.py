@@ -1,0 +1,1 @@
+"""Ubuntu FAI Build System - Core package."""

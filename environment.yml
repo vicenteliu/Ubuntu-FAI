@@ -1,0 +1,59 @@
+# Ubuntu FAI Build System - Conda Environment Configuration
+# 使用 conda 管理 Python 依赖和环境
+
+name: ubuntu-fai
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  # Python 核心版本
+  - python=3.12
+
+  # 核心运行时依赖
+  - pydantic=2.5.*
+  - jinja2=3.1.*
+  - pyyaml=6.0.*
+  - requests=2.31.*
+  - click=8.1.*
+  - pathlib2=2.3.*
+  - typing-extensions=4.9.*
+
+  # 开发和验证工具
+  - pytest=7.4.*
+  - pytest-cov=4.1.*
+  - pytest-mock=3.12.*
+  - pytest-asyncio=0.23.*
+
+  # 代码质量工具
+  - black=23.12.*
+  - mypy=1.8.*
+  - ruff=0.1.*
+  - isort=5.13.*
+
+  # 安全检查工具
+  - bandit=1.7.*
+  - safety=3.0.*
+
+  # 文档生成（可选）
+  - sphinx=7.2.*
+  - sphinx_rtd_theme=2.0.*
+
+  # 构建和打包工具
+  - build=1.0.*
+  - wheel=0.42.*
+
+  # 通过 pip 安装的依赖（conda 中不可用的包）
+  - pip
+  - pip:
+    # 如果有 conda 中不可用的特定包，在这里添加
+    # - some-pip-only-package
+
+# 开发环境变量
+variables:
+  PYTHONPATH: $CONDA_PREFIX/src
+  FAI_PROJECT_ROOT: $CONDA_PREFIX
+  PYTHONUNBUFFERED: "1"
+
+# 环境激活后运行的命令
+# 注意：这些在 conda env create 时不会运行，需要在激活后手动运行或通过脚本

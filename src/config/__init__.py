@@ -1,0 +1,1 @@
+"""Configuration management module for Ubuntu FAI build system."""

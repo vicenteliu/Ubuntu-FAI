@@ -1,0 +1,76 @@
+# FAI package configuration for custom software
+# This file is dynamically generated based on user configuration
+# and should not be edited manually
+
+# Package management directives
+PACKAGES install
+
+# User-specified APT packages
+# These packages are read from the build configuration
+# and will be automatically populated during build generation
+
+# Example packages that might be included:
+# Development tools
+# - git
+# - vim
+# - code
+# - build-essential
+# - python3-pip
+# - nodejs
+# - npm
+# - docker.io
+# - mysql-client
+# - postgresql-client
+
+# Media and graphics
+# - gimp
+# - inkscape
+# - blender
+# - vlc
+# - audacity
+# - kdenlive
+
+# Communication and productivity
+# - slack-desktop
+# - discord
+# - zoom
+# - teams
+# - skype
+
+# System utilities
+# - htop
+# - tree
+# - ncdu
+# - tmux
+# - screen
+# - rsync
+
+# Note: This file will be automatically populated by the 
+# FAI configuration generator based on the packages.apt_packages
+# list in the user's config.json file.
+
+# The generator will also handle:
+# - Package conflict detection
+# - Dependency resolution
+# - Hardware compatibility checks
+# - Repository requirements
+
+# Hardware-specific packages will be added here based on detection:
+# $HARDWARE_PACKAGES
+
+# Encryption-related packages (if encryption is enabled):
+# $ENCRYPTION_PACKAGES
+
+# WiFi packages (if WiFi hardware detected):
+# $WIFI_PACKAGES
+
+# GPU driver packages (if specific GPU detected):
+# $GPU_DRIVER_PACKAGE
+
+# CPU microcode packages:
+# $CPU_MICROCODE_PACKAGE
+
+# Virtual machine packages (if VM detected):
+# $VIRTUAL_PACKAGES
+
+# End of custom software packages
