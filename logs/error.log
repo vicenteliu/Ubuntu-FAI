@@ -2,3 +2,44 @@
 2025-07-18 13:43:24,676 - ubuntu-fai.config - WARNING - logger:log_config_validation:223 - 配置警告: First-boot execution is enabled but no scripts specified. Consider disabling first-boot or adding scripts.
 2025-07-18 13:43:24,676 - ubuntu-fai.builder - WARNING - build:load_and_validate_config:99 - Configuration warning: Consider using key size 512 for stronger encryption
 2025-07-18 13:43:24,676 - ubuntu-fai.builder - WARNING - build:load_and_validate_config:99 - Configuration warning: First-boot execution is enabled but no scripts specified. Consider disabling first-boot or adding scripts.
+2025-07-18 14:07:53,485 - ubuntu-fai.build - ERROR - logger:log_phase_end:212 - 阶段 config_validation 失败 - 耗时: 0.00s
+2025-07-18 14:07:53,486 - ubuntu-fai.builder - ERROR - build:load_and_validate_config:117 - Failed to load configuration: 1 validation error for BuildConfig
+  Value error, Dell hardware may have issues with key sizes > 256 bits [type=value_error, input_value={'_comment': 'Ubuntu FAI ...depending on packages'}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/value_error
+2025-07-18 14:07:53,486 - ubuntu-fai.builder - ERROR - build:build:417 - Build failed: 1 validation error for BuildConfig
+  Value error, Dell hardware may have issues with key sizes > 256 bits [type=value_error, input_value={'_comment': 'Ubuntu FAI ...depending on packages'}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/value_error
+2025-07-18 14:07:53,486 - ubuntu-fai.build - ERROR - logger:log_build_end:186 - 构建失败 - 耗时: 0.00s
+2025-07-18 14:07:53,486 - ubuntu-fai.main - ERROR - build:main:528 - Build failed: 1 validation error for BuildConfig
+  Value error, Dell hardware may have issues with key sizes > 256 bits [type=value_error, input_value={'_comment': 'Ubuntu FAI ...depending on packages'}}, input_type=dict]
+    For further information visit https://errors.pydantic.dev/2.9/v/value_error
+2025-07-18 14:08:27,188 - ubuntu-fai.config - ERROR - logger:log_config_validation:225 - 配置验证失败: /Users/bytedance/Documents/Workspace/Ubuntu-FAI/config.json.example
+2025-07-18 14:08:27,188 - ubuntu-fai.config - ERROR - logger:log_config_validation:228 - 配置错误: Reserved username not allowed: admin
+2025-07-18 14:08:27,188 - ubuntu-fai.build - ERROR - logger:log_phase_end:212 - 阶段 config_validation 失败 - 耗时: 0.00s
+2025-07-18 14:08:27,188 - ubuntu-fai.builder - ERROR - build:load_and_validate_config:117 - Failed to load configuration: Configuration validation failed: ['Reserved username not allowed: admin']
+2025-07-18 14:08:27,188 - ubuntu-fai.builder - ERROR - build:build:417 - Build failed: Configuration validation failed: ['Reserved username not allowed: admin']
+2025-07-18 14:08:27,188 - ubuntu-fai.build - ERROR - logger:log_build_end:186 - 构建失败 - 耗时: 0.00s
+2025-07-18 14:08:27,188 - ubuntu-fai.main - ERROR - build:main:528 - Build failed: Configuration validation failed: ['Reserved username not allowed: admin']
+2025-07-18 14:08:47,154 - ubuntu-fai.config - WARNING - logger:log_config_validation:223 - 配置警告: Consider using key size 512 for stronger encryption
+2025-07-18 14:08:47,154 - ubuntu-fai.builder - WARNING - build:load_and_validate_config:99 - Configuration warning: Consider using key size 512 for stronger encryption
+2025-07-18 14:09:00,112 - ubuntu-fai.build - ERROR - logger:log_phase_end:212 - 阶段 asset_download 失败 - 耗时: 12.96s
+2025-07-18 14:09:00,112 - ubuntu-fai.builder - ERROR - build:download_assets:162 - Asset download failed: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/example/scripts/main/system-setup.sh
+2025-07-18 14:09:00,113 - ubuntu-fai.builder - ERROR - build:build:417 - Build failed: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/example/scripts/main/system-setup.sh
+2025-07-18 14:09:00,113 - ubuntu-fai.build - ERROR - logger:log_build_end:186 - 构建失败 - 耗时: 12.96s
+2025-07-18 14:09:00,113 - ubuntu-fai.main - ERROR - build:main:528 - Build failed: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/example/scripts/main/system-setup.sh
+2025-07-18 14:09:10,996 - ubuntu-fai.config - WARNING - logger:log_config_validation:223 - 配置警告: Consider using key size 512 for stronger encryption
+2025-07-18 14:09:10,996 - ubuntu-fai.builder - WARNING - build:load_and_validate_config:99 - Configuration warning: Consider using key size 512 for stronger encryption
+2025-07-18 14:09:11,090 - ubuntu-fai.build - ERROR - logger:log_phase_end:212 - 阶段 first_boot_generation 失败 - 耗时: 0.01s
+2025-07-18 14:09:11,090 - ubuntu-fai.builder - ERROR - build:generate_first_boot_config:273 - First-boot configuration generation failed: 'FirstBootScript' object has no attribute 'name'
+2025-07-18 14:09:11,090 - ubuntu-fai.builder - ERROR - build:build:417 - Build failed: 'FirstBootScript' object has no attribute 'name'
+2025-07-18 14:09:11,091 - ubuntu-fai.build - ERROR - logger:log_build_end:186 - 构建失败 - 耗时: 0.10s
+2025-07-18 14:09:11,091 - ubuntu-fai.main - ERROR - build:main:528 - Build failed: 'FirstBootScript' object has no attribute 'name'
+2025-07-18 14:11:34,978 - ubuntu-fai.config - WARNING - logger:log_config_validation:223 - 配置警告: Consider using key size 512 for stronger encryption
+2025-07-18 14:11:34,978 - ubuntu-fai.builder - WARNING - build:load_and_validate_config:99 - Configuration warning: Consider using key size 512 for stronger encryption
+2025-07-18 14:11:35,171 - ubuntu-fai.build - ERROR - logger:log_phase_end:212 - 阶段 asset_download 失败 - 耗时: 0.19s
+2025-07-18 14:11:35,172 - ubuntu-fai.builder - ERROR - build:download_assets:162 - Asset download failed: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/example/scripts/main/system-setup.sh
+2025-07-18 14:11:35,172 - ubuntu-fai.builder - ERROR - build:build:417 - Build failed: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/example/scripts/main/system-setup.sh
+2025-07-18 14:11:35,172 - ubuntu-fai.build - ERROR - logger:log_build_end:186 - 构建失败 - 耗时: 0.20s
+2025-07-18 14:11:35,172 - ubuntu-fai.main - ERROR - build:main:528 - Build failed: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/example/scripts/main/system-setup.sh
+2025-07-18 14:11:48,063 - ubuntu-fai.config - WARNING - logger:log_config_validation:223 - 配置警告: Consider using key size 512 for stronger encryption
+2025-07-18 14:11:48,063 - ubuntu-fai.builder - WARNING - build:load_and_validate_config:99 - Configuration warning: Consider using key size 512 for stronger encryption

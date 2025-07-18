@@ -1,13 +1,23 @@
 # FAI package configuration for custom software
 # Dynamically generated from user configuration
-# Generated at: 2025-07-18T13:43:24.747054
+# Generated at: 2025-07-18T14:11:48.147537
 
 PACKAGES install
 
 # User-specified APT packages
-git
 curl
+wget
+git
 vim
+htop
+build-essential
+python3-pip
+docker.io
+firefox
+libreoffice
+gimp
+vlc
+thunderbird
 
 # Hardware-specific packages (populated by class scripts)
 # $HARDWARE_PACKAGES will be expanded during FAI execution

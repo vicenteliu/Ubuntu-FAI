@@ -70,6 +70,7 @@ esac
 
 
 # Run custom scripts
+log_info "Running custom first-boot scripts..."
 
 # System cleanup and optimization
 log_info "Performing system cleanup..."

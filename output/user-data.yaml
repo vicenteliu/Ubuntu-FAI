@@ -28,9 +28,9 @@ autoinstall:
   
   # Identity and user configuration
   identity:
-    hostname: "ubuntu-fai-test"
-    username: "testuser"
-    realname: "Test User"
+    hostname: "ubuntu-fai-desktop"
+    username: "ubuntu"
+    realname: "System Administrator"
   
   # SSH configuration
   ssh:

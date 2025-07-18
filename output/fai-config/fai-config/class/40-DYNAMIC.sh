@@ -36,19 +36,26 @@ echo "SNAP_PACKAGES"
 echo "NETWORK_DHCP"
 
 # User configuration classes
+echo "SSH_KEYS"
 
 
 # First-boot classes
 echo "FIRST_BOOT"
+echo "FIRST_BOOT_AUTO"
+echo "FIRST_BOOT_AUTO"
+echo "FIRST_BOOT_MANUAL"
 
 # Development and tools classes
 echo "DEVELOPMENT_TOOLS"
 
 # Docker class if docker packages are included
+echo "DOCKER"
 
 # Multimedia class for media packages
+echo "MULTIMEDIA"
 
 # Office productivity class
+echo "OFFICE_PRODUCTIVITY"
 
 # Security tools class
 
@@ -58,9 +65,9 @@ echo "FAIEND"
 # Export variables for use in other FAI scripts
 export FAI_HARDWARE_VENDOR="HardwareVendor.DELL"
 export FAI_ENCRYPTION_ENABLED="true"
-export FAI_USER_NAME="testuser"
-export FAI_HOSTNAME="ubuntu-fai-test"
-export FAI_BUILD_TIMESTAMP="2025-07-18T13:43:24.746374"
+export FAI_USER_NAME="ubuntu"
+export FAI_HOSTNAME="ubuntu-fai-desktop"
+export FAI_BUILD_TIMESTAMP="2025-07-18T14:11:48.147044"
 
 # Log class assignment for debugging
 {
@@ -70,9 +77,9 @@ export FAI_BUILD_TIMESTAMP="2025-07-18T13:43:24.746374"
     echo "Encryption Enabled: True"
 echo "Encryption Cipher: aes-xts-plain64"
     echo "Key Size: 256"
-echo "Custom Packages: 3"
-    echo "DEB URLs: 0"
-    echo "First Boot Scripts: 0"
-    echo "Build Date: 2025-07-18T13:43:24.746374"
+echo "Custom Packages: 13"
+    echo "DEB URLs: 2"
+    echo "First Boot Scripts: 3"
+    echo "Build Date: 2025-07-18T14:11:48.147044"
     echo "==========================="
 } >> $LOGDIR/fai-class-assignment.log 2>/dev/null || true

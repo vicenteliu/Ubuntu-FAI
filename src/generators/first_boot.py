@@ -3,6 +3,7 @@
 import logging
 from pathlib import Path
 from typing import Dict, Any, List
+from urllib.parse import urlparse
 
 from jinja2 import Environment, FileSystemLoader, Template
 
@@ -122,8 +123,16 @@ class FirstBootGenerator:
         scripts_dir = output_dir / "scripts"
         scripts_dir.mkdir(exist_ok=True)
         
-        for script_config in config.first_boot.scripts:
-            script_file = scripts_dir / f"{script_config.name}.sh"
+        for i, script_config in enumerate(config.first_boot.scripts):
+            # Generate script name from URL or use index
+            if script_config.url:
+                url_path = urlparse(script_config.url).path
+                filename = Path(url_path).name or f"script_{i}.sh"
+                script_name = filename.replace('.sh', '')
+            else:
+                script_name = f"script_{i}"
+
+            script_file = scripts_dir / f"{script_name}.sh"
             
             # If script has content, write it directly
             if hasattr(script_config, 'content') and script_config.content:

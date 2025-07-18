@@ -1,298 +1,257 @@
 #!/bin/bash
-# Ubuntu FAI Build System Docker Runner
-# Handles Docker build and execution with proper volume mounts and permissions
 
-set -euo pipefail  # Exit on error, undefined vars, pipe failures
+# Ubuntu FAI Build System - 构建运行脚本
+# 使用 Python 虚拟环境运行 Ubuntu FAI 构建系统
 
-# Script configuration
+set -euo pipefail
+
+# 脚本配置
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-IMAGE_NAME="ubuntu-fai"
-IMAGE_TAG="latest"
-CONTAINER_NAME="ubuntu-fai-build"
+VENV_NAME="ubuntu-fai-venv"
+VENV_PATH="$SCRIPT_DIR/$VENV_NAME"
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+# 默认参数
+CONFIG_FILE=""
+SKIP_DOWNLOADS=false
+SKIP_FAI=false
+DEBUG=false
+HELP=false
 
-# Logging functions
+# 颜色输出函数
 log_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
+    echo -e "\033[0;34m[INFO]\033[0m $1"
 }
 
 log_success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
-}
-
-log_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
+    echo -e "\033[0;32m[SUCCESS]\033[0m $1"
 }
 
 log_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
+    echo -e "\033[0;31m[ERROR]\033[0m $1"
 }
 
-# Usage information
-usage() {
+log_warning() {
+    echo -e "\033[0;33m[WARNING]\033[0m $1"
+}
+
+# 显示帮助信息
+show_help() {
     cat << EOF
-Ubuntu FAI Build System Docker Runner
+Ubuntu FAI Build System - 构建运行脚本
 
-USAGE:
-    $0 [OPTIONS] <config.json> [BUILD_ARGS...]
+用法: $0 [选项] <配置文件>
 
-OPTIONS:
-    -h, --help              Show this help message
-    -b, --build             Force rebuild of Docker image
-    -c, --clean             Clean up containers and images
-    -d, --debug             Enable debug mode (verbose output)
-    --no-cache              Build Docker image without cache
-    --output-dir DIR        Specify output directory (default: ./output)
+选项:
+  --skip-downloads    跳过资源下载阶段
+  --skip-fai         跳过 FAI ISO 构建阶段
+  --debug            启用调试模式
+  --help             显示此帮助信息
 
-EXAMPLES:
-    $0 config.json.example                    # Build ISO with example config
-    $0 --build config.json.example           # Rebuild Docker image first
-    $0 --output-dir /tmp/iso config.json     # Custom output directory
-    $0 --debug config.json                   # Enable verbose logging
+参数:
+  <配置文件>         构建配置文件路径 (例如: config.json.example)
 
-NOTES:
-    - Docker must be installed and running
-    - Config file must exist and be readable
-    - Output directory will be created if it doesn't exist
-    - Container runs with current user permissions for file access
+示例:
+  $0 config.json.example
+  $0 --skip-downloads config.json.example
+  $0 --debug --skip-fai config.json.example
 
+注意:
+  - 请确保已经运行 ./setup-venv.sh 创建虚拟环境
+  - 构建需要在 Ubuntu 环境中运行
+  - 使用 --skip-fai 仅生成配置文件而不构建 ISO
 EOF
 }
 
-# Parse command line arguments
-FORCE_BUILD=false
-CLEAN=false
-DEBUG=false
-NO_CACHE=false
-OUTPUT_DIR="$SCRIPT_DIR/output"
-CONFIG_FILE=""
-BUILD_ARGS=()
+# 解析命令行参数
+parse_arguments() {
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --skip-downloads)
+                SKIP_DOWNLOADS=true
+                shift
+                ;;
+            --skip-fai)
+                SKIP_FAI=true
+                shift
+                ;;
+            --debug)
+                DEBUG=true
+                shift
+                ;;
+            --help|-h)
+                HELP=true
+                shift
+                ;;
+            -*)
+                log_error "未知选项: $1"
+                show_help
+                exit 1
+                ;;
+            *)
+                if [[ -z "$CONFIG_FILE" ]]; then
+                    CONFIG_FILE="$1"
+                else
+                    log_error "多余的参数: $1"
+                    show_help
+                    exit 1
+                fi
+                shift
+                ;;
+        esac
+    done
 
-while [[ $# -gt 0 ]]; do
-    case $1 in
-        -h|--help)
-            usage
-            exit 0
-            ;;
-        -b|--build)
-            FORCE_BUILD=true
-            shift
-            ;;
-        -c|--clean)
-            CLEAN=true
-            shift
-            ;;
-        -d|--debug)
-            DEBUG=true
-            shift
-            ;;
-        --no-cache)
-            NO_CACHE=true
-            shift
-            ;;
-        --output-dir)
-            OUTPUT_DIR="$2"
-            shift 2
-            ;;
-        -*)
-            log_error "Unknown option: $1"
-            usage
-            exit 1
-            ;;
-        *)
-            if [[ -z "$CONFIG_FILE" ]]; then
-                CONFIG_FILE="$1"
-            else
-                BUILD_ARGS+=("$1")
-            fi
-            shift
-            ;;
-    esac
-done
-
-# Enable debug mode if requested
-if [[ "$DEBUG" == "true" ]]; then
-    set -x
-    log_info "Debug mode enabled"
-fi
-
-# Clean up function
-cleanup() {
-    if [[ "$CLEAN" == "true" ]]; then
-        log_info "Cleaning up Docker containers and images..."
-        docker container rm -f "$CONTAINER_NAME" 2>/dev/null || true
-        docker image rm -f "$IMAGE_NAME:$IMAGE_TAG" 2>/dev/null || true
-        log_success "Cleanup completed"
+    if [[ "$HELP" == true ]]; then
+        show_help
         exit 0
     fi
-}
 
-# Check Docker availability
-check_docker() {
-    if ! command -v docker &> /dev/null; then
-        log_error "Docker is not installed or not in PATH"
-        log_info "Please install Docker: https://docs.docker.com/get-docker/"
-        exit 1
-    fi
-
-    if ! docker info &> /dev/null; then
-        log_error "Docker daemon is not running"
-        log_info "Please start Docker and try again"
-        exit 1
-    fi
-}
-
-# Build Docker image
-build_image() {
-    local build_args=()
-    
-    if [[ "$NO_CACHE" == "true" ]]; then
-        build_args+=("--no-cache")
-    fi
-
-    log_info "Building Docker image: $IMAGE_NAME:$IMAGE_TAG"
-    
-    if ! docker build "${build_args[@]}" -t "$IMAGE_NAME:$IMAGE_TAG" "$SCRIPT_DIR"; then
-        log_error "Failed to build Docker image"
-        exit 1
-    fi
-    
-    log_success "Docker image built successfully"
-}
-
-# Check if image exists and build if necessary
-check_and_build_image() {
-    if [[ "$FORCE_BUILD" == "true" ]] || ! docker image inspect "$IMAGE_NAME:$IMAGE_TAG" &> /dev/null; then
-        build_image
-    else
-        log_info "Using existing Docker image: $IMAGE_NAME:$IMAGE_TAG"
-    fi
-}
-
-# Validate config file
-validate_config() {
     if [[ -z "$CONFIG_FILE" ]]; then
-        log_error "No configuration file specified"
-        usage
+        log_error "缺少配置文件参数"
+        show_help
+        exit 1
+    fi
+}
+
+# 检查虚拟环境
+check_virtual_environment() {
+    log_info "检查 Python 虚拟环境..."
+    
+    if [[ ! -d "$VENV_PATH" ]]; then
+        log_error "虚拟环境不存在: $VENV_PATH"
+        log_info "请先运行: ./setup-venv.sh"
+        exit 1
+    fi
+    
+    if [[ ! -f "$VENV_PATH/bin/activate" ]]; then
+        log_error "虚拟环境激活脚本不存在: $VENV_PATH/bin/activate"
+        log_info "请重新运行: ./setup-venv.sh"
+        exit 1
+    fi
+    
+    log_success "虚拟环境检查通过: $VENV_NAME"
+}
+
+# 验证配置文件
+validate_config() {
+    log_info "验证配置文件..."
+
+    if [[ -z "$CONFIG_FILE" ]]; then
+        log_error "未指定配置文件"
         exit 1
     fi
 
     if [[ ! -f "$CONFIG_FILE" ]]; then
-        log_error "Configuration file not found: $CONFIG_FILE"
+        log_error "配置文件不存在: $CONFIG_FILE"
         exit 1
     fi
 
     if [[ ! -r "$CONFIG_FILE" ]]; then
-        log_error "Configuration file not readable: $CONFIG_FILE"
+        log_error "配置文件不可读: $CONFIG_FILE"
         exit 1
     fi
 
-    # Convert to absolute path
-    CONFIG_FILE="$(realpath "$CONFIG_FILE")"
-    log_info "Using configuration file: $CONFIG_FILE"
+    # 获取绝对路径
+    CONFIG_FILE=$(realpath "$CONFIG_FILE")
+    log_success "使用配置文件: $CONFIG_FILE"
 }
 
-# Prepare output directory
+# 准备输出目录
 prepare_output_dir() {
-    # Convert to absolute path
-    OUTPUT_DIR="$(realpath -m "$OUTPUT_DIR")"
+    local output_dir
+
+    # 确定输出目录路径
+    output_dir="$SCRIPT_DIR/output"
     
-    if [[ ! -d "$OUTPUT_DIR" ]]; then
-        log_info "Creating output directory: $OUTPUT_DIR"
-        mkdir -p "$OUTPUT_DIR"
+    # 检查输出目录
+    if [[ ! -d "$output_dir" ]]; then
+        log_info "创建输出目录: $output_dir"
+        mkdir -p "$output_dir"
     fi
     
-    if [[ ! -w "$OUTPUT_DIR" ]]; then
-        log_error "Output directory not writable: $OUTPUT_DIR"
+    if [[ ! -w "$output_dir" ]]; then
+        log_error "输出目录不可写: $output_dir"
         exit 1
     fi
     
-    log_info "Using output directory: $OUTPUT_DIR"
+    log_success "使用输出目录: $output_dir"
 }
 
-# Get current user ID and group ID for permission mapping
-get_user_info() {
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        # macOS
-        USER_ID=$(id -u)
-        GROUP_ID=$(id -g)
+# 构建构建参数
+build_build_args() {
+    local args=()
+
+    # 添加配置文件参数
+    args+=("$CONFIG_FILE")
+
+    # 添加可选参数
+    if [[ "$SKIP_DOWNLOADS" == true ]]; then
+        args+=("--skip-downloads")
+    fi
+
+    if [[ "$SKIP_FAI" == true ]]; then
+        args+=("--skip-fai")
+    fi
+    
+    if [[ "$DEBUG" == true ]]; then
+        args+=("--debug")
+    fi
+
+    echo "${args[@]}"
+}
+
+# 运行构建
+run_build() {
+    log_info "激活虚拟环境并运行构建..."
+    
+    # 激活虚拟环境
+    source "$VENV_PATH/bin/activate"
+    
+    # 检查 Python 解释器
+    if ! command -v python &> /dev/null; then
+        log_error "虚拟环境中的 Python 解释器不可用"
+        exit 1
+    fi
+    
+    # 构建参数
+    local build_args
+    build_args=($(build_build_args))
+
+    log_info "运行构建命令: python build.py ${build_args[*]}"
+
+    # 运行构建
+    if python build.py "${build_args[@]}"; then
+        log_success "构建完成成功"
+        log_info "检查输出目录: $SCRIPT_DIR/output"
     else
-        # Linux
-        USER_ID=$(id -u)
-        GROUP_ID=$(id -g)
-    fi
-    
-    log_info "Running container with UID:GID = $USER_ID:$GROUP_ID"
-}
-
-# Run Docker container
-run_container() {
-    local docker_args=(
-        "run"
-        "--rm"
-        "--name" "$CONTAINER_NAME"
-        "--user" "$USER_ID:$GROUP_ID"
-        "--volume" "$CONFIG_FILE:/app/config.json:ro"
-        "--volume" "$OUTPUT_DIR:/app/output:rw"
-        "--volume" "$SCRIPT_DIR:/app/host-src:ro"
-        "--workdir" "/app"
-    )
-
-    # Add privileged mode for FAI operations (ISO creation requires loop devices)
-    docker_args+=("--privileged")
-    
-    # Add environment variables
-    docker_args+=("--env" "PYTHONUNBUFFERED=1")
-    
-    if [[ "$DEBUG" == "true" ]]; then
-        docker_args+=("--env" "FAI_DEBUG=1")
-    fi
-
-    # Add image and command
-    docker_args+=("$IMAGE_NAME:$IMAGE_TAG")
-    docker_args+=("python3" "build.py" "config.json")
-    docker_args+=("${BUILD_ARGS[@]}")
-
-    log_info "Starting Ubuntu FAI build container..."
-    log_info "Container name: $CONTAINER_NAME"
-    log_info "Config file: $CONFIG_FILE"
-    log_info "Output directory: $OUTPUT_DIR"
-    
-    if ! docker "${docker_args[@]}"; then
-        log_error "Container execution failed"
+        log_error "构建失败"
         exit 1
     fi
-    
-    log_success "Build completed successfully"
-    log_info "Check output directory: $OUTPUT_DIR"
 }
 
-# Main execution
+# 清理函数
+cleanup() {
+    if [[ "${VIRTUAL_ENV:-}" ]]; then
+        deactivate 2>/dev/null || true
+    fi
+}
+
+# 主函数
 main() {
-    # Handle cleanup if requested
-    cleanup
+    # 显示调试状态
+    if [[ "$DEBUG" == true ]]; then
+        log_info "调试模式已启用"
+    fi
     
-    # Validate environment
-    check_docker
+    # 设置错误处理
+    trap 'log_warning "用户中断"; exit 130' INT TERM
+    trap cleanup EXIT
     
-    # Validate inputs
+    check_virtual_environment
     validate_config
     prepare_output_dir
-    get_user_info
-    
-    # Build and run
-    check_and_build_image
-    run_container
+    run_build
 }
 
-# Trap signals for cleanup
-trap 'log_warning "Interrupted by user"; exit 130' INT TERM
-
-# Run main function
-main "$@"
+# 解析参数并运行
+parse_arguments "$@"
+main

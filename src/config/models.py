@@ -28,7 +28,7 @@ class HardwareConfig(BaseModel):
     model_config = ConfigDict(
         str_strip_whitespace=True,
         validate_assignment=True,
-        extra="forbid"
+        extra="ignore"
     )
     
     vendor: HardwareVendor = Field(
@@ -61,7 +61,7 @@ class EncryptionConfig(BaseModel):
     model_config = ConfigDict(
         str_strip_whitespace=True,
         validate_assignment=True,
-        extra="forbid"
+        extra="ignore"
     )
     
     enabled: bool = Field(
@@ -127,7 +127,7 @@ class PackageConfig(BaseModel):
     model_config = ConfigDict(
         str_strip_whitespace=True,
         validate_assignment=True,
-        extra="forbid"
+        extra="ignore"
     )
     
     apt_packages: List[str] = Field(
@@ -163,8 +163,18 @@ class PackageConfig(BaseModel):
                     raise ValueError(f"Invalid URL scheme: {url}")
                 if not parsed.netloc:
                     raise ValueError(f"Invalid URL format: {url}")
-                if not url.endswith('.deb'):
-                    raise ValueError(f"URL must point to .deb file: {url}")
+                # 允许重定向链接，不强制要求以 .deb 结尾
+                # 实际的 .deb 文件验证将在下载时进行
+                if url.endswith('.deb'):
+                    # 直接 .deb 链接，验证通过
+                    pass
+                elif any(domain in parsed.netloc for domain in ['code.visualstudio.com', 'dl.google.com', 'github.com']):
+                    # 已知的软件下载站点，允许重定向链接
+                    pass
+                else:
+                    # 其他链接，警告但不阻止
+                    import warnings
+                    warnings.warn(f"URL may not point to .deb file, will verify during download: {url}")
             except Exception as e:
                 raise ValueError(f"Invalid .deb URL {url}: {e}")
         return v
@@ -176,7 +186,7 @@ class UserConfig(BaseModel):
     model_config = ConfigDict(
         str_strip_whitespace=True,
         validate_assignment=True,
-        extra="forbid"
+        extra="ignore"
     )
     
     username: str = Field(
@@ -236,7 +246,7 @@ class FirstBootScript(BaseModel):
     model_config = ConfigDict(
         str_strip_whitespace=True,
         validate_assignment=True,
-        extra="forbid"
+        extra="ignore"
     )
     
     url: str = Field(
@@ -282,7 +292,7 @@ class FirstBootConfig(BaseModel):
     model_config = ConfigDict(
         str_strip_whitespace=True,
         validate_assignment=True,
-        extra="forbid"
+        extra="ignore"
     )
     
     enabled: bool = Field(
@@ -307,7 +317,7 @@ class NetworkConfig(BaseModel):
     model_config = ConfigDict(
         str_strip_whitespace=True,
         validate_assignment=True,
-        extra="forbid"
+        extra="ignore"
     )
     
     dhcp: bool = Field(
@@ -329,7 +339,7 @@ class BuildConfig(BaseModel):
     model_config = ConfigDict(
         str_strip_whitespace=True,
         validate_assignment=True,
-        extra="forbid",
+        extra="ignore",
         validate_default=True
     )
     
