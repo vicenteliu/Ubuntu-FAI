@@ -1,0 +1,4 @@
+2025-07-18 13:43:24,676 - ubuntu-fai.config - WARNING - logger:log_config_validation:223 - 配置警告: Consider using key size 512 for stronger encryption
+2025-07-18 13:43:24,676 - ubuntu-fai.config - WARNING - logger:log_config_validation:223 - 配置警告: First-boot execution is enabled but no scripts specified. Consider disabling first-boot or adding scripts.
+2025-07-18 13:43:24,676 - ubuntu-fai.builder - WARNING - build:load_and_validate_config:99 - Configuration warning: Consider using key size 512 for stronger encryption
+2025-07-18 13:43:24,676 - ubuntu-fai.builder - WARNING - build:load_and_validate_config:99 - Configuration warning: First-boot execution is enabled but no scripts specified. Consider disabling first-boot or adding scripts.

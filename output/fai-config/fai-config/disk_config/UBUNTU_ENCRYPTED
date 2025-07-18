@@ -1,0 +1,67 @@
+# FAI disk configuration for Ubuntu Desktop with LUKS encryption
+# LUKS full-disk encryption with LVM for flexible volume management
+
+# Disk selection - target the largest available disk (usually SSD)
+# This will be overridden by dynamic configuration based on user preferences
+disk_config disk1 disklabel:gpt bootable:1 fstabkey:uuid
+
+# EFI System Partition (unencrypted, required for UEFI boot)
+primary /boot/efi 512M vfat rw,createoptions="-F 32"
+
+# Boot partition (unencrypted, required for GRUB to load encrypted root)
+primary /boot 1G ext4 rw,relatime
+
+# LUKS encrypted partition (uses remaining space)
+# This partition will contain the LVM physical volume
+primary - 0- - -
+
+# LUKS encryption setup
+# The partition will be encrypted with user-specified passphrase
+# Cipher and key size will be set by encryption class variables
+cryptsetup /dev/disk1p3 /dev/mapper/ubuntu-crypt "-c $LUKS_CIPHER -s $LUKS_KEY_SIZE -h $LUKS_HASH --iter-time $LUKS_ITER_TIME"
+
+# LVM Physical Volume on encrypted device
+lvm ubuntu-vg /dev/mapper/ubuntu-crypt
+
+# LVM Logical Volumes
+# Root volume (50% of available space)
+ubuntu-vg root 50% ext4 rw,relatime,errors=remount-ro /
+
+# Home volume (40% of available space)  
+ubuntu-vg home 40% ext4 rw,relatime,nodev,nosuid /home
+
+# Swap volume (8% of available space, minimum 2GB, maximum 16GB)
+ubuntu-vg swap 8%:2G:16G swap sw
+
+# Reserved space (2% kept free for LVM snapshots and expansion)
+# This is automatic - LVM keeps some space free
+
+# Alternative disk configuration for systems without UEFI
+# Uncomment these lines and comment UEFI sections above if needed
+# disk_config disk1 disklabel:msdos bootable:1 fstabkey:uuid
+# primary /boot 1G ext4 rw,relatime
+# primary - 0- - -
+# cryptsetup /dev/disk1p2 /dev/mapper/ubuntu-crypt "-c $LUKS_CIPHER -s $LUKS_KEY_SIZE -h $LUKS_HASH --iter-time $LUKS_ITER_TIME"
+
+# Mount options optimized for encrypted storage
+# Root: errors=remount-ro for safety, relatime for performance
+# Home: nodev,nosuid for security, relatime for performance  
+# Boot: relatime for performance (unencrypted)
+
+# SSD optimization (applied automatically if SSD detected)
+# - LUKS will use --allow-discards if SSD_OPTIMIZATIONS=yes
+# - Mount options will include 'discard' flag
+# - Partition alignment optimized for SSD performance
+
+# Performance tuning notes:
+# - LUKS cipher: aes-xts-plain64 (best performance/security balance)
+# - Key size: 512 bits (256 for older hardware compatibility)
+# - Hash: sha256 (good performance, secure)
+# - Iteration time: 2000ms (LUKS2 default, good security/performance balance)
+
+# Security considerations:
+# - Boot partition remains unencrypted (required for GRUB)
+# - EFI partition remains unencrypted (required for UEFI)
+# - All user data in / and /home is encrypted
+# - Swap is encrypted (prevents memory dumps)
+# - LUKS header backup will be created automatically

@@ -8,38 +8,50 @@ FROM ubuntu:24.04@sha256:b359f1067efa76f37863778f7b6d0e8d911e3ee8efa807ad01fbf5d
 ENV DEBIAN_FRONTEND=noninteractive
 
 # 更新包列表并安装核心系统依赖
-RUN apt-get update && apt-get install -y \
-    curl \
-    wget \
-    ca-certificates \
-    sudo \
-    fai-server \
-    fai-client \
-    fai-cd \
-    debootstrap \
-    squashfs-tools \
-    isolinux \
-    syslinux \
-    genisoimage \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get clean
+RUN apt-get update && \
+    # 安装通用依赖
+    apt-get install -y \
+        curl \
+        wget \
+        ca-certificates \
+        sudo \
+        debootstrap \
+        squashfs-tools \
+        genisoimage \
+    && \
+    # 尝试安装 FAI 相关包 (可能在某些架构上不可用)
+    (apt-get install -y \
+        fai-server \
+        fai-client \
+        fai-cd \
+        isolinux \
+        syslinux \
+    || echo "某些 FAI 包在此架构上不可用，跳过安装") && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean
 
-# 安装 Miniconda
-ARG MINICONDA_VERSION=latest
+# 安装 Miniforge (避免 conda ToS 问题)
 ENV CONDA_DIR=/opt/conda
 ENV PATH=$CONDA_DIR/bin:$PATH
 
-RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -O /tmp/miniconda.sh && \
-    /bin/bash /tmp/miniconda.sh -b -p $CONDA_DIR && \
-    rm /tmp/miniconda.sh && \
-    $CONDA_DIR/bin/conda clean -tipsy && \
+RUN ARCH=$(uname -m) && \
+    if [ "$ARCH" = "x86_64" ]; then \
+        MINIFORGE_ARCH="x86_64"; \
+    elif [ "$ARCH" = "aarch64" ]; then \
+        MINIFORGE_ARCH="aarch64"; \
+    else \
+        echo "不支持的架构: $ARCH" && exit 1; \
+    fi && \
+    wget --quiet https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-${MINIFORGE_ARCH}.sh -O /tmp/miniforge.sh && \
+    /bin/bash /tmp/miniforge.sh -b -p $CONDA_DIR && \
+    rm /tmp/miniforge.sh && \
+    $CONDA_DIR/bin/conda clean --all --yes && \
     ln -s $CONDA_DIR/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     echo ". $CONDA_DIR/etc/profile.d/conda.sh" >> ~/.bashrc && \
     echo "conda activate base" >> ~/.bashrc
 
-# 配置 conda
+# 配置 conda (Miniforge 默认使用 conda-forge)
 RUN conda config --set always_yes yes --set changeps1 no && \
-    conda config --add channels conda-forge && \
     conda update -q conda
 
 # 创建非 root 用户
@@ -62,7 +74,7 @@ FROM base AS builder
 # 复制环境配置文件
 COPY --chown=fai:fai environment.yml /tmp/environment.yml
 
-# 创建 conda 环境
+# 创建 conda 环境 (仅使用 conda-forge)
 RUN conda env create -f /tmp/environment.yml
 
 # 验证环境创建成功

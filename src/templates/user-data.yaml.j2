@@ -15,58 +15,36 @@ autoinstall:
   network:
     version: 2
     ethernets:
-      "{{ network_interface|default('eth0') }}":
-        {% if config.network.dhcp -%}
-        dhcp4: true
-        dhcp6: true
-        {% else -%}
-        dhcp4: false
-        dhcp6: false
-        addresses:
-          - "{{ config.network.static_ip }}/{{ config.network.netmask }}"
-        gateway4: "{{ config.network.gateway }}"
-        nameservers:
-          addresses:
-            {% for dns in config.network.dns_servers -%}
-            - "{{ dns }}"
-            {% endfor %}
-        {% endif %}
+      eth0:
+        dhcp4: {{ config.network.dhcp | lower }}
+        dhcp6: {{ config.network.dhcp | lower }}
   
-  # Storage configuration - LUKS encryption with LVM
+  # Storage configuration
   storage:
     layout:
-      {% if config.encryption.enabled -%}
+{% if config.encryption.enabled -%}
       name: lvm
       sizing-policy: scaled
       password: "{{ config.encryption.passphrase }}"
-      match:
-        {% if config.hardware.target_ssd -%}
-        ssd: true
-        {% endif -%}
-        {% if config.hardware.disk_size_min_gb -%}
-        size: ">={{ config.hardware.disk_size_min_gb }}G"
-        {% else -%}
-        size: largest
-        {% endif %}
-      {% else -%}
+{% else -%}
       name: direct
+{% endif -%}
       match:
-        {% if config.hardware.target_ssd -%}
+{% if config.hardware.target_ssd -%}
         ssd: true
-        {% endif -%}
-        {% if config.hardware.disk_size_min_gb -%}
+{% endif -%}
+{% if config.hardware.disk_size_min_gb -%}
         size: ">={{ config.hardware.disk_size_min_gb }}G"
-        {% else -%}
+{% else -%}
         size: largest
-        {% endif %}
-      {% endif %}
+{% endif %}
   
   # Identity and user configuration
   identity:
     hostname: "{{ config.network.hostname }}"
     username: "{{ config.user.username }}"
     {% if config.user.password -%}
-    password: "{{ config.user.password | password_hash }}"
+    password: "{{ config.user.password }}"
     {% endif -%}
     realname: "{{ config.user.full_name }}"
   
@@ -165,7 +143,7 @@ autoinstall:
       - name: {{ config.user.username }}
         gecos: "{{ config.user.full_name }}"
         {% if config.user.password -%}
-        passwd: "{{ config.user.password | password_hash }}"
+        passwd: "{{ config.user.password }}"
         {% endif -%}
         shell: /bin/bash
         groups:

@@ -337,15 +337,20 @@ class ScriptDownloader:
         scripts = []
         
         # Handle custom scripts
-        for script_config in config.scripts:
-            if hasattr(script_config, 'url') and script_config.url:
+        for i, script_config in enumerate(config.scripts):
+            if script_config.url:
+                # Generate script name from URL or use index
+                url_path = urlparse(script_config.url).path
+                filename = Path(url_path).name or f"script_{i}.sh"
+                script_name = filename.replace('.sh', '')
+                
                 scripts.append(ScriptInfo(
-                    name=script_config.name,
+                    name=script_name,
                     url=script_config.url,
-                    sha256=getattr(script_config, 'sha256', None),
-                    executable=getattr(script_config, 'executable', True),
-                    interpreter=getattr(script_config, 'interpreter', None),
-                    destination=self.cache_dir / f"{script_config.name}.sh"
+                    sha256=script_config.checksum,
+                    executable=True,
+                    interpreter=None,  # Will be detected from script content
+                    destination=self.cache_dir / filename
                 ))
         
         return scripts

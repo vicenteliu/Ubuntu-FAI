@@ -1,0 +1,38 @@
+2025-07-18 13:43:24,674 - ubuntu-fai.build - INFO - logger:log_build_start:175 - 开始构建进程 - 配置文件: /Users/bytedance/Documents/Workspace/Ubuntu-FAI/config-working.json
+2025-07-18 13:43:24,675 - ubuntu-fai.build - INFO - logger:log_phase_start:194 - 开始阶段: config_validation
+2025-07-18 13:43:24,675 - ubuntu-fai.builder - INFO - build:load_and_validate_config:71 - Loading configuration from /Users/bytedance/Documents/Workspace/Ubuntu-FAI/config-working.json
+2025-07-18 13:43:24,676 - ubuntu-fai.config - INFO - logger:log_config_validation:220 - 配置验证通过: /Users/bytedance/Documents/Workspace/Ubuntu-FAI/config-working.json
+2025-07-18 13:43:24,676 - ubuntu-fai.config - WARNING - logger:log_config_validation:223 - 配置警告: Consider using key size 512 for stronger encryption
+2025-07-18 13:43:24,676 - ubuntu-fai.config - WARNING - logger:log_config_validation:223 - 配置警告: First-boot execution is enabled but no scripts specified. Consider disabling first-boot or adding scripts.
+2025-07-18 13:43:24,676 - ubuntu-fai.builder - WARNING - build:load_and_validate_config:99 - Configuration warning: Consider using key size 512 for stronger encryption
+2025-07-18 13:43:24,676 - ubuntu-fai.builder - WARNING - build:load_and_validate_config:99 - Configuration warning: First-boot execution is enabled but no scripts specified. Consider disabling first-boot or adding scripts.
+2025-07-18 13:43:24,676 - ubuntu-fai.build - INFO - logger:log_phase_end:210 - 阶段 config_validation 完成 - 耗时: 0.00s
+2025-07-18 13:43:24,676 - ubuntu-fai.builder - INFO - build:load_and_validate_config:108 - Configuration loaded and validated successfully
+2025-07-18 13:43:24,676 - ubuntu-fai.build - INFO - logger:log_phase_start:194 - 开始阶段: asset_download
+2025-07-18 13:43:24,676 - ubuntu-fai.builder - INFO - build:download_assets:130 - Downloading required assets...
+2025-07-18 13:43:24,677 - ubuntu-fai.build - INFO - logger:log_phase_end:210 - 阶段 asset_download 完成 - 耗时: 0.00s
+2025-07-18 13:43:24,677 - ubuntu-fai.builder - INFO - build:download_assets:155 - Asset downloads completed
+2025-07-18 13:43:24,677 - ubuntu-fai.build - INFO - logger:log_phase_start:194 - 开始阶段: autoinstall_generation
+2025-07-18 13:43:24,677 - ubuntu-fai.builder - INFO - build:generate_autoinstall_config:176 - Generating autoinstall configuration...
+2025-07-18 13:43:24,686 - ubuntu-fai.template - INFO - logger:log_template_generation:249 - 模板生成成功: user-data.yaml.j2 -> output/user-data.yaml
+2025-07-18 13:43:24,686 - ubuntu-fai.build - INFO - logger:log_phase_end:210 - 阶段 autoinstall_generation 完成 - 耗时: 0.01s
+2025-07-18 13:43:24,686 - ubuntu-fai.builder - INFO - build:generate_autoinstall_config:191 - Autoinstall configuration generated: output/user-data.yaml
+2025-07-18 13:43:24,686 - ubuntu-fai.build - INFO - logger:log_phase_start:194 - 开始阶段: fai_generation
+2025-07-18 13:43:24,687 - ubuntu-fai.builder - INFO - build:generate_fai_config:217 - Generating FAI configuration...
+2025-07-18 13:43:24,748 - ubuntu-fai.build - INFO - logger:log_phase_end:210 - 阶段 fai_generation 完成 - 耗时: 0.06s
+2025-07-18 13:43:24,748 - ubuntu-fai.builder - INFO - build:generate_fai_config:229 - FAI configuration generated: output/fai-config
+2025-07-18 13:43:24,748 - ubuntu-fai.build - INFO - logger:log_phase_start:194 - 开始阶段: first_boot_generation
+2025-07-18 13:43:24,748 - ubuntu-fai.builder - INFO - build:generate_first_boot_config:252 - Generating first-boot configuration...
+2025-07-18 13:43:24,756 - ubuntu-fai.build - INFO - logger:log_phase_end:210 - 阶段 first_boot_generation 完成 - 耗时: 0.01s
+2025-07-18 13:43:24,756 - ubuntu-fai.builder - INFO - build:generate_first_boot_config:264 - First-boot configuration generated: output/first-boot
+2025-07-18 13:43:24,756 - ubuntu-fai.builder - INFO - build:build:402 - Skipping FAI build as requested
+2025-07-18 13:43:24,756 - ubuntu-fai.builder - INFO - build:build:407 - Configuration generation completed in 0.08s
+2025-07-18 13:43:24,756 - ubuntu-fai.builder - INFO - build:build:409 - Phase timings:
+2025-07-18 13:43:24,756 - ubuntu-fai.builder - INFO - build:build:411 -   config_validation: 0.00s
+2025-07-18 13:43:24,756 - ubuntu-fai.builder - INFO - build:build:411 -   asset_download: 0.00s
+2025-07-18 13:43:24,756 - ubuntu-fai.builder - INFO - build:build:411 -   autoinstall_generation: 0.01s
+2025-07-18 13:43:24,756 - ubuntu-fai.builder - INFO - build:build:411 -   fai_generation: 0.06s
+2025-07-18 13:43:24,756 - ubuntu-fai.builder - INFO - build:build:411 -   first_boot_generation: 0.01s
+2025-07-18 13:43:24,756 - ubuntu-fai.builder - INFO - build:cleanup_temp_files:355 - Cleaning up temporary files...
+2025-07-18 13:43:24,757 - ubuntu-fai.build - INFO - logger:log_build_end:184 - 构建成功完成 - 耗时: 0.08s
+2025-07-18 13:43:24,757 - ubuntu-fai.main - INFO - build:main:511 - Configuration files generated in: output

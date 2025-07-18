@@ -44,8 +44,8 @@ class AutoinstallGenerator:
         self.env = Environment(
             loader=FileSystemLoader(str(self.templates_dir)),
             autoescape=select_autoescape(['html', 'xml']),
-            trim_blocks=True,
-            lstrip_blocks=True,
+            trim_blocks=False,
+            lstrip_blocks=False,
             keep_trailing_newline=True
         )
         
@@ -79,7 +79,7 @@ class AutoinstallGenerator:
         """
         try:
             # Load the user-data template
-            template = self.env.get_template('user-data.yaml.j2')
+            template = self.env.get_template('user-data-simple.yaml.j2')
             
             # Prepare template context
             context = self._prepare_template_context(config)

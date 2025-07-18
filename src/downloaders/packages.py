@@ -227,26 +227,23 @@ class PackageDownloader:
         """
         packages = []
         
-        # Handle custom DEB packages
-        for deb_pkg in config.custom_debs:
+        # Handle custom DEB packages from URLs
+        for i, deb_url in enumerate(config.deb_urls):
+            # Extract filename from URL
+            url_path = urlparse(deb_url).path
+            filename = Path(url_path).name or f"package_{i}.deb"
+            package_name = filename.replace('.deb', '')
+            
             packages.append(PackageInfo(
-                name=deb_pkg.name,
-                url=deb_pkg.url,
-                sha256=deb_pkg.sha256,
-                size_bytes=deb_pkg.size_bytes,
-                destination=self.cache_dir / f"{deb_pkg.name}.deb"
+                name=package_name,
+                url=deb_url,
+                sha256=None,  # No checksum validation for simple URLs
+                size_bytes=None,
+                destination=self.cache_dir / filename
             ))
         
-        # Handle snap packages (if they have downloadable assets)
-        for snap_pkg in config.snap_packages:
-            if hasattr(snap_pkg, 'url') and snap_pkg.url:
-                packages.append(PackageInfo(
-                    name=snap_pkg.name,
-                    url=snap_pkg.url,
-                    sha256=getattr(snap_pkg, 'sha256', None),
-                    size_bytes=getattr(snap_pkg, 'size_bytes', None),
-                    destination=self.cache_dir / f"{snap_pkg.name}.snap"
-                ))
+        # Note: snap_packages are handled by the system package manager,
+        # not as downloadable assets, so we don't process them here
         
         return packages
     

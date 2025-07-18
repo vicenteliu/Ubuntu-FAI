@@ -1,0 +1,50 @@
+#!/bin/bash
+# FAI script for Ubuntu Desktop user setup
+# Creates and configures the primary user account
+
+set -euo pipefail
+
+echo "Setting up Ubuntu Desktop user account..."
+
+# Get user configuration from environment variables
+USERNAME="${FAI_USER_NAME:-ubuntu}"
+USER_FULL_NAME="${FAI_USER_FULL_NAME:-Ubuntu User}"
+USER_PASSWORD="${FAI_USER_PASSWORD:-}"
+USER_GROUPS="adm,dialout,cdrom,floppy,sudo,audio,dip,video,plugdev,netdev,lxd"
+
+# Create user account
+if ! id "$USERNAME" >/dev/null 2>&1; then
+    useradd -m -s /bin/bash -c "$USER_FULL_NAME" -G "$USER_GROUPS" "$USERNAME"
+    echo "Created user account: $USERNAME"
+fi
+
+# Set password if provided
+if [ -n "$USER_PASSWORD" ]; then
+    echo "$USERNAME:$USER_PASSWORD" | chpasswd
+    echo "Set password for user: $USERNAME"
+fi
+
+# Configure sudo access
+if [ "${FAI_SUDO_NOPASSWD:-false}" = "true" ]; then
+    echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/90-$USERNAME"
+    chmod 440 "/etc/sudoers.d/90-$USERNAME"
+    echo "Configured passwordless sudo for: $USERNAME"
+fi
+
+# Setup SSH keys if provided
+if [ -n "${FAI_SSH_KEYS:-}" ]; then
+    USER_HOME="/home/$USERNAME"
+    SSH_DIR="$USER_HOME/.ssh"
+    
+    mkdir -p "$SSH_DIR"
+    echo "$FAI_SSH_KEYS" > "$SSH_DIR/authorized_keys"
+    chown -R "$USERNAME:$USERNAME" "$SSH_DIR"
+    chmod 700 "$SSH_DIR"
+    chmod 600 "$SSH_DIR/authorized_keys"
+    echo "Configured SSH keys for: $USERNAME"
+fi
+
+# Configure user directories
+sudo -u "$USERNAME" xdg-user-dirs-update
+
+echo "User setup completed for: $USERNAME"

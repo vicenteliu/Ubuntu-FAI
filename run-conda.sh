@@ -205,7 +205,7 @@ build_image() {
 
     log_info "构建 Docker 镜像: $IMAGE_NAME:$IMAGE_TAG"
     
-    if ! docker build "${build_args[@]}" -f "$DOCKERFILE" -t "$IMAGE_NAME:$IMAGE_TAG" "$SCRIPT_DIR"; then
+    if ! docker build ${build_args[@]+"${build_args[@]}"} -f "$DOCKERFILE" -t "$IMAGE_NAME:$IMAGE_TAG" "$SCRIPT_DIR"; then
         log_error "Docker 镜像构建失败"
         exit 1
     fi

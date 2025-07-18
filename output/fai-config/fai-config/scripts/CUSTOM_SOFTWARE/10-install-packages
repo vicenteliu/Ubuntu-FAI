@@ -1,0 +1,50 @@
+#!/bin/bash
+# FAI script for custom software installation
+# Installs user-specified packages and .deb files
+
+set -euo pipefail
+
+echo "Installing custom software packages..."
+
+# Update package database
+apt-get update
+
+# Install custom APT packages if specified
+if [ -n "${CUSTOM_APT_PACKAGES:-}" ]; then
+    echo "Installing custom APT packages: $CUSTOM_APT_PACKAGES"
+    apt-get install -y $CUSTOM_APT_PACKAGES
+fi
+
+# Download and install .deb packages if specified
+if [ -n "${CUSTOM_DEB_URLS:-}" ]; then
+    echo "Installing custom .deb packages..."
+    DEB_DIR="/tmp/custom-debs"
+    mkdir -p "$DEB_DIR"
+    
+    # Process each URL
+    echo "$CUSTOM_DEB_URLS" | tr ',' '\n' | while read -r url; do
+        if [ -n "$url" ]; then
+            filename=$(basename "$url")
+            echo "Downloading: $filename"
+            wget -O "$DEB_DIR/$filename" "$url"
+            
+            echo "Installing: $filename"
+            dpkg -i "$DEB_DIR/$filename" || apt-get install -f -y
+        fi
+    done
+    
+    # Cleanup
+    rm -rf "$DEB_DIR"
+fi
+
+# Install snap packages if specified
+if [ -n "${CUSTOM_SNAP_PACKAGES:-}" ]; then
+    echo "Installing snap packages: $CUSTOM_SNAP_PACKAGES"
+    echo "$CUSTOM_SNAP_PACKAGES" | tr ',' '\n' | while read -r snap; do
+        if [ -n "$snap" ]; then
+            snap install "$snap"
+        fi
+    done
+fi
+
+echo "Custom software installation completed"

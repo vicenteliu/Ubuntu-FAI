@@ -4,7 +4,6 @@
 name: ubuntu-fai
 channels:
   - conda-forge
-  - defaults
 
 dependencies:
   # Python 核心版本 - 使用3.11以获得更好的兼容性

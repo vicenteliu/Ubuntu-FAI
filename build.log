@@ -588,3 +588,180 @@ network.static_ip
 2025-07-17 17:19:09,678 - __main__ - ERROR - Build failed: 'PackageConfig' object has no attribute 'custom_debs'
 2025-07-17 17:19:09,678 - __main__ - INFO - Cleaning up temporary files...
 2025-07-17 17:19:09,678 - __main__ - ERROR - Build failed: 'PackageConfig' object has no attribute 'custom_debs'
+2025-07-18 13:22:54,798 - __main__ - INFO - Loading configuration from /Users/bytedance/Documents/Workspace/Ubuntu-FAI/config-working.json
+2025-07-18 13:22:54,802 - src.config.validator - WARNING - Essential desktop packages not explicitly listed: ubuntu-desktop, gdm3. These will be installed via FAI class configuration.
+2025-07-18 13:22:54,802 - __main__ - WARNING - Configuration warning: Consider using key size 512 for stronger encryption
+2025-07-18 13:22:54,802 - __main__ - WARNING - Configuration warning: First-boot execution is enabled but no scripts specified. Consider disabling first-boot or adding scripts.
+2025-07-18 13:22:54,802 - __main__ - INFO - Configuration loaded and validated successfully
+2025-07-18 13:22:54,802 - __main__ - INFO - Downloading required assets...
+2025-07-18 13:22:54,802 - __main__ - INFO - Asset downloads completed
+2025-07-18 13:22:54,802 - __main__ - INFO - Generating autoinstall configuration...
+2025-07-18 13:22:54,859 - __main__ - ERROR - Build failed: Failed to generate autoinstall config: Invalid YAML syntax: mapping values are not allowed here
+  in "<unicode string>", line 20, column 14:
+            dhcp6: true
+                 ^
+2025-07-18 13:22:54,859 - __main__ - INFO - Cleaning up temporary files...
+2025-07-18 13:22:54,859 - __main__ - ERROR - Build failed: Failed to generate autoinstall config: Invalid YAML syntax: mapping values are not allowed here
+  in "<unicode string>", line 20, column 14:
+            dhcp6: true
+                 ^
+2025-07-18 13:24:20,161 - __main__ - INFO - Loading configuration from /Users/bytedance/Documents/Workspace/Ubuntu-FAI/config-working.json
+2025-07-18 13:24:20,167 - src.config.validator - WARNING - Essential desktop packages not explicitly listed: ubuntu-desktop, gdm3. These will be installed via FAI class configuration.
+2025-07-18 13:24:20,167 - __main__ - WARNING - Configuration warning: Consider using key size 512 for stronger encryption
+2025-07-18 13:24:20,168 - __main__ - WARNING - Configuration warning: First-boot execution is enabled but no scripts specified. Consider disabling first-boot or adding scripts.
+2025-07-18 13:24:20,168 - __main__ - INFO - Configuration loaded and validated successfully
+2025-07-18 13:24:20,168 - __main__ - INFO - Downloading required assets...
+2025-07-18 13:24:20,168 - __main__ - INFO - Asset downloads completed
+2025-07-18 13:24:20,168 - __main__ - INFO - Generating autoinstall configuration...
+2025-07-18 13:24:20,188 - __main__ - ERROR - Build failed: Failed to generate autoinstall config: Invalid YAML syntax: mapping values are not allowed here
+  in "<unicode string>", line 20, column 14:
+            dhcp6: true
+                 ^
+2025-07-18 13:24:20,188 - __main__ - INFO - Cleaning up temporary files...
+2025-07-18 13:24:20,188 - __main__ - ERROR - Build failed: Failed to generate autoinstall config: Invalid YAML syntax: mapping values are not allowed here
+  in "<unicode string>", line 20, column 14:
+            dhcp6: true
+                 ^
+2025-07-18 13:26:20,161 - __main__ - INFO - Loading configuration from /Users/bytedance/Documents/Workspace/Ubuntu-FAI/config-working.json
+2025-07-18 13:26:20,165 - src.config.validator - WARNING - Essential desktop packages not explicitly listed: ubuntu-desktop, gdm3. These will be installed via FAI class configuration.
+2025-07-18 13:26:20,165 - __main__ - WARNING - Configuration warning: Consider using key size 512 for stronger encryption
+2025-07-18 13:26:20,165 - __main__ - WARNING - Configuration warning: First-boot execution is enabled but no scripts specified. Consider disabling first-boot or adding scripts.
+2025-07-18 13:26:20,165 - __main__ - INFO - Configuration loaded and validated successfully
+2025-07-18 13:26:20,165 - __main__ - INFO - Downloading required assets...
+2025-07-18 13:26:20,165 - __main__ - INFO - Asset downloads completed
+2025-07-18 13:26:20,165 - __main__ - INFO - Generating autoinstall configuration...
+2025-07-18 13:26:20,176 - __main__ - ERROR - Build failed: Failed to generate autoinstall config: Invalid YAML syntax: mapping values are not allowed here
+  in "<unicode string>", line 26, column 20:
+          sizing-policy: scaled
+                       ^
+2025-07-18 13:26:20,176 - __main__ - INFO - Cleaning up temporary files...
+2025-07-18 13:26:20,176 - __main__ - ERROR - Build failed: Failed to generate autoinstall config: Invalid YAML syntax: mapping values are not allowed here
+  in "<unicode string>", line 26, column 20:
+          sizing-policy: scaled
+                       ^
+2025-07-18 13:26:43,468 - __main__ - INFO - Loading configuration from /Users/bytedance/Documents/Workspace/Ubuntu-FAI/config-working.json
+2025-07-18 13:26:43,469 - src.config.validator - WARNING - Essential desktop packages not explicitly listed: ubuntu-desktop, gdm3. These will be installed via FAI class configuration.
+2025-07-18 13:26:43,469 - __main__ - WARNING - Configuration warning: Consider using key size 512 for stronger encryption
+2025-07-18 13:26:43,469 - __main__ - WARNING - Configuration warning: First-boot execution is enabled but no scripts specified. Consider disabling first-boot or adding scripts.
+2025-07-18 13:26:43,469 - __main__ - INFO - Configuration loaded and validated successfully
+2025-07-18 13:26:43,469 - __main__ - INFO - Downloading required assets...
+2025-07-18 13:26:43,470 - __main__ - INFO - Asset downloads completed
+2025-07-18 13:26:43,470 - __main__ - INFO - Generating autoinstall configuration...
+2025-07-18 13:26:43,480 - __main__ - ERROR - Build failed: Failed to generate autoinstall config: Invalid YAML syntax: mapping values are not allowed here
+  in "<unicode string>", line 25, column 29:
+          name: lvmsizing-policy: scaled
+                                ^
+2025-07-18 13:26:43,480 - __main__ - INFO - Cleaning up temporary files...
+2025-07-18 13:26:43,480 - __main__ - ERROR - Build failed: Failed to generate autoinstall config: Invalid YAML syntax: mapping values are not allowed here
+  in "<unicode string>", line 25, column 29:
+          name: lvmsizing-policy: scaled
+                                ^
+2025-07-18 13:27:01,536 - __main__ - INFO - Loading configuration from /Users/bytedance/Documents/Workspace/Ubuntu-FAI/config-working.json
+2025-07-18 13:27:01,538 - src.config.validator - WARNING - Essential desktop packages not explicitly listed: ubuntu-desktop, gdm3. These will be installed via FAI class configuration.
+2025-07-18 13:27:01,538 - __main__ - WARNING - Configuration warning: Consider using key size 512 for stronger encryption
+2025-07-18 13:27:01,538 - __main__ - WARNING - Configuration warning: First-boot execution is enabled but no scripts specified. Consider disabling first-boot or adding scripts.
+2025-07-18 13:27:01,538 - __main__ - INFO - Configuration loaded and validated successfully
+2025-07-18 13:27:01,538 - __main__ - INFO - Downloading required assets...
+2025-07-18 13:27:01,538 - __main__ - INFO - Asset downloads completed
+2025-07-18 13:27:01,538 - __main__ - INFO - Generating autoinstall configuration...
+2025-07-18 13:27:01,549 - __main__ - ERROR - Build failed: Failed to generate autoinstall config: Invalid YAML syntax: mapping values are not allowed here
+  in "<unicode string>", line 26, column 20:
+          sizing-policy: scaled
+                       ^
+2025-07-18 13:27:01,549 - __main__ - INFO - Cleaning up temporary files...
+2025-07-18 13:27:01,549 - __main__ - ERROR - Build failed: Failed to generate autoinstall config: Invalid YAML syntax: mapping values are not allowed here
+  in "<unicode string>", line 26, column 20:
+          sizing-policy: scaled
+                       ^
+2025-07-18 13:27:17,779 - __main__ - INFO - Loading configuration from /Users/bytedance/Documents/Workspace/Ubuntu-FAI/config-working.json
+2025-07-18 13:27:17,780 - src.config.validator - WARNING - Essential desktop packages not explicitly listed: ubuntu-desktop, gdm3. These will be installed via FAI class configuration.
+2025-07-18 13:27:17,780 - __main__ - WARNING - Configuration warning: Consider using key size 512 for stronger encryption
+2025-07-18 13:27:17,780 - __main__ - WARNING - Configuration warning: First-boot execution is enabled but no scripts specified. Consider disabling first-boot or adding scripts.
+2025-07-18 13:27:17,780 - __main__ - INFO - Configuration loaded and validated successfully
+2025-07-18 13:27:17,780 - __main__ - INFO - Downloading required assets...
+2025-07-18 13:27:17,780 - __main__ - INFO - Asset downloads completed
+2025-07-18 13:27:17,780 - __main__ - INFO - Generating autoinstall configuration...
+2025-07-18 13:27:17,794 - __main__ - ERROR - Build failed: Failed to generate autoinstall config: Invalid YAML syntax: mapping values are not allowed here
+  in "<unicode string>", line 26, column 20:
+          sizing-policy: scaled
+                       ^
+2025-07-18 13:27:17,794 - __main__ - INFO - Cleaning up temporary files...
+2025-07-18 13:27:17,794 - __main__ - ERROR - Build failed: Failed to generate autoinstall config: Invalid YAML syntax: mapping values are not allowed here
+  in "<unicode string>", line 26, column 20:
+          sizing-policy: scaled
+                       ^
+2025-07-18 13:28:01,577 - __main__ - INFO - Loading configuration from /Users/bytedance/Documents/Workspace/Ubuntu-FAI/config-working.json
+2025-07-18 13:28:01,577 - src.config.validator - WARNING - Essential desktop packages not explicitly listed: ubuntu-desktop, gdm3. These will be installed via FAI class configuration.
+2025-07-18 13:28:01,577 - __main__ - WARNING - Configuration warning: Consider using key size 512 for stronger encryption
+2025-07-18 13:28:01,577 - __main__ - WARNING - Configuration warning: First-boot execution is enabled but no scripts specified. Consider disabling first-boot or adding scripts.
+2025-07-18 13:28:01,577 - __main__ - INFO - Configuration loaded and validated successfully
+2025-07-18 13:28:01,577 - __main__ - INFO - Downloading required assets...
+2025-07-18 13:28:01,578 - __main__ - INFO - Asset downloads completed
+2025-07-18 13:28:01,578 - __main__ - INFO - Generating autoinstall configuration...
+2025-07-18 13:28:01,588 - src.generators.autoinstall - INFO - Autoinstall schema validation passed
+2025-07-18 13:28:01,589 - src.generators.autoinstall - INFO - Generated user-data.yaml: output/user-data.yaml
+2025-07-18 13:28:01,589 - __main__ - INFO - Autoinstall configuration generated: output/user-data.yaml
+2025-07-18 13:28:01,589 - __main__ - INFO - Generating FAI configuration...
+2025-07-18 13:28:01,589 - __main__ - ERROR - Build failed: 'FAIConfigGenerator' object has no attribute 'generate_config'
+2025-07-18 13:28:01,589 - __main__ - INFO - Cleaning up temporary files...
+2025-07-18 13:28:01,589 - __main__ - ERROR - Build failed: 'FAIConfigGenerator' object has no attribute 'generate_config'
+2025-07-18 13:28:34,502 - __main__ - INFO - Loading configuration from /Users/bytedance/Documents/Workspace/Ubuntu-FAI/config-working.json
+2025-07-18 13:28:34,503 - src.config.validator - WARNING - Essential desktop packages not explicitly listed: ubuntu-desktop, gdm3. These will be installed via FAI class configuration.
+2025-07-18 13:28:34,503 - __main__ - WARNING - Configuration warning: Consider using key size 512 for stronger encryption
+2025-07-18 13:28:34,503 - __main__ - WARNING - Configuration warning: First-boot execution is enabled but no scripts specified. Consider disabling first-boot or adding scripts.
+2025-07-18 13:28:34,503 - __main__ - INFO - Configuration loaded and validated successfully
+2025-07-18 13:28:34,503 - __main__ - INFO - Downloading required assets...
+2025-07-18 13:28:34,503 - __main__ - INFO - Asset downloads completed
+2025-07-18 13:28:34,503 - __main__ - INFO - Generating autoinstall configuration...
+2025-07-18 13:28:34,508 - src.generators.autoinstall - INFO - Autoinstall schema validation passed
+2025-07-18 13:28:34,510 - src.generators.autoinstall - INFO - Generated user-data.yaml: output/user-data.yaml
+2025-07-18 13:28:34,510 - __main__ - INFO - Autoinstall configuration generated: output/user-data.yaml
+2025-07-18 13:28:34,510 - __main__ - INFO - Generating FAI configuration...
+2025-07-18 13:28:34,513 - src.generators.fai_config - INFO - Copying base FAI configuration...
+2025-07-18 13:28:34,526 - src.generators.fai_config - INFO - Generating dynamic FAI class script...
+2025-07-18 13:28:34,535 - src.generators.fai_config - INFO - Generating custom package configuration...
+2025-07-18 13:28:34,536 - src.generators.fai_config - INFO - Generating FAI environment configuration...
+2025-07-18 13:28:34,536 - src.generators.fai_config - INFO - Applying configuration overlays...
+2025-07-18 13:28:34,537 - src.generators.fai_config - INFO - Validating FAI configuration...
+2025-07-18 13:28:34,537 - src.generators.fai_config - INFO - FAI configuration validation passed
+2025-07-18 13:28:34,537 - src.generators.fai_config - INFO - Generated FAI configuration: output/fai-config/fai-config
+2025-07-18 13:28:34,537 - __main__ - INFO - FAI configuration generated: output/fai-config
+2025-07-18 13:28:34,537 - __main__ - INFO - Generating first-boot configuration...
+2025-07-18 13:28:34,537 - src.generators.first_boot - INFO - Generating first-boot configuration in output/first-boot
+2025-07-18 13:28:34,539 - src.generators.first_boot - INFO - Generated first-boot service: output/first-boot/first-boot.service
+2025-07-18 13:28:34,544 - src.generators.first_boot - INFO - Generated first-boot script: output/first-boot/first-boot.sh
+2025-07-18 13:28:34,544 - src.generators.first_boot - INFO - First-boot configuration generation completed
+2025-07-18 13:28:34,544 - __main__ - INFO - First-boot configuration generated: output/first-boot
+2025-07-18 13:28:34,544 - __main__ - INFO - Skipping FAI build as requested
+2025-07-18 13:28:34,544 - __main__ - INFO - Cleaning up temporary files...
+2025-07-18 13:28:34,544 - __main__ - INFO - Configuration files generated in: output
+2025-07-18 13:30:02,345 - __main__ - INFO - Loading configuration from /Users/bytedance/Documents/Workspace/Ubuntu-FAI/config-working.json
+2025-07-18 13:30:02,346 - src.config.validator - WARNING - Essential desktop packages not explicitly listed: ubuntu-desktop, gdm3. These will be installed via FAI class configuration.
+2025-07-18 13:30:02,346 - __main__ - WARNING - Configuration warning: Consider using key size 512 for stronger encryption
+2025-07-18 13:30:02,346 - __main__ - WARNING - Configuration warning: First-boot execution is enabled but no scripts specified. Consider disabling first-boot or adding scripts.
+2025-07-18 13:30:02,346 - __main__ - INFO - Configuration loaded and validated successfully
+2025-07-18 13:30:02,346 - __main__ - INFO - Downloading required assets...
+2025-07-18 13:30:02,346 - __main__ - INFO - Asset downloads completed
+2025-07-18 13:30:02,346 - __main__ - INFO - Generating autoinstall configuration...
+2025-07-18 13:30:02,351 - src.generators.autoinstall - INFO - Autoinstall schema validation passed
+2025-07-18 13:30:02,351 - src.generators.autoinstall - INFO - Generated user-data.yaml: output/user-data.yaml
+2025-07-18 13:30:02,351 - __main__ - INFO - Autoinstall configuration generated: output/user-data.yaml
+2025-07-18 13:30:02,351 - __main__ - INFO - Generating FAI configuration...
+2025-07-18 13:30:02,354 - src.generators.fai_config - INFO - Copying base FAI configuration...
+2025-07-18 13:30:02,364 - src.generators.fai_config - INFO - Generating dynamic FAI class script...
+2025-07-18 13:30:02,373 - src.generators.fai_config - INFO - Generating custom package configuration...
+2025-07-18 13:30:02,373 - src.generators.fai_config - INFO - Generating FAI environment configuration...
+2025-07-18 13:30:02,374 - src.generators.fai_config - INFO - Applying configuration overlays...
+2025-07-18 13:30:02,374 - src.generators.fai_config - INFO - Validating FAI configuration...
+2025-07-18 13:30:02,374 - src.generators.fai_config - INFO - FAI configuration validation passed
+2025-07-18 13:30:02,374 - src.generators.fai_config - INFO - Generated FAI configuration: output/fai-config/fai-config
+2025-07-18 13:30:02,374 - __main__ - INFO - FAI configuration generated: output/fai-config
+2025-07-18 13:30:02,374 - __main__ - INFO - Generating first-boot configuration...
+2025-07-18 13:30:02,374 - src.generators.first_boot - INFO - Generating first-boot configuration in output/first-boot
+2025-07-18 13:30:02,376 - src.generators.first_boot - INFO - Generated first-boot service: output/first-boot/first-boot.service
+2025-07-18 13:30:02,381 - src.generators.first_boot - INFO - Generated first-boot script: output/first-boot/first-boot.sh
+2025-07-18 13:30:02,381 - src.generators.first_boot - INFO - First-boot configuration generation completed
+2025-07-18 13:30:02,381 - __main__ - INFO - First-boot configuration generated: output/first-boot
+2025-07-18 13:30:02,381 - __main__ - INFO - Skipping FAI build as requested
+2025-07-18 13:30:02,381 - __main__ - INFO - Cleaning up temporary files...
+2025-07-18 13:30:02,381 - __main__ - INFO - Configuration files generated in: output
