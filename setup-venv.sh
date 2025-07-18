@@ -60,6 +60,12 @@ check_system_requirements() {
         log_error "pip 未安装。请安装: sudo apt install python3-pip"
         exit 1
     fi
+    
+    # 检查编译依赖 (用于 PyYAML 等包)
+    if ! dpkg -l | grep -q python3-dev; then
+        log_warning "缺少 python3-dev，可能导致某些包编译失败"
+        log_info "建议安装: sudo apt install python3-dev libyaml-dev"
+    fi
 
     log_success "系统要求检查通过"
 }
