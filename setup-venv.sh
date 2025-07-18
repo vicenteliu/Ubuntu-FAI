@@ -131,7 +131,7 @@ verify_installation() {
     source "$VENV_PATH/bin/activate"
 
     # 检查关键包
-    local packages=("pydantic" "jinja2" "pyyaml" "requests" "pytest")
+    local packages=("pydantic" "jinja2" "yaml" "requests" "pytest")
 
     for package in "${packages[@]}"; do
         if python -c "import $package" 2>/dev/null; then
