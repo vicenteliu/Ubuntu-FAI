@@ -9,14 +9,12 @@ requests==2.31.0
 
 # Additional runtime dependencies
 click==8.1.7           # CLI interface and argument parsing
-pathlib2==2.3.7        # Enhanced pathlib functionality
 typing-extensions==4.9.0  # Type hints for older Python versions
 
 # Development and validation tools
 pytest==7.4.4          # Testing framework
 pytest-cov==4.1.0      # Test coverage reporting
 pytest-mock==3.12.0    # Mocking for tests
-pytest-asyncio==0.23.2 # Async testing support
 
 # Code quality tools
 black==23.12.1         # Code formatting
@@ -26,15 +24,7 @@ isort==5.13.2          # Import sorting
 
 # Security and validation
 bandit==1.7.5          # Security linting
-safety==3.0.1          # Dependency vulnerability checking
-
-# Documentation (if needed)
-sphinx==7.2.6          # Documentation generation
-sphinx-rtd-theme==2.0.0  # ReadTheDocs theme
 
 # Build and packaging tools
 build==1.0.3           # Modern Python build tool
 wheel==0.42.0          # Wheel package format
-
-# Hash verification for security (pip-tools generated)
-# To regenerate: pip-compile --generate-hashes requirements.in
