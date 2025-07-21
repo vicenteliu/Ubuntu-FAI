@@ -1,9 +1,0 @@
-{
-  "session_id": "20250718_134324",
-  "timestamp": "2025-07-18T13:43:24.757112",
-  "log_files": {
-    "main": "logs/build.log",
-    "error": "logs/error.log",
-    "json": "logs/build.json"
-  }
-}
