@@ -19,6 +19,7 @@ from src.generators.fai_config import FAIConfigGenerator
 from src.generators.first_boot import FirstBootGenerator
 from src.downloaders import PackageDownloader, ScriptDownloader
 from src.utils.logger import setup_logging, BuildLogger
+from src.utils.asset_scanner import AssetScanner
 
 
 class FAIBuilder:
@@ -162,6 +163,149 @@ class FAIBuilder:
                 self.logger.error(f"Asset download failed: {e}")
             raise
     
+    def scan_and_prepare_local_assets(self, base_dir: Path = None) -> None:
+        """Automatically scan and prepare local assets from ./local_assets/ directory."""
+        phase_start = time.time()
+        if self.build_logger:
+            self.build_logger.log_phase_start("asset_scanning")
+        
+        if self.logger:
+            self.logger.info("Scanning for local assets...")
+        
+        try:
+            import shutil
+            
+            # Initialize asset scanner
+            scanner = AssetScanner(base_dir)
+            
+            # Scan all assets
+            assets = scanner.scan_all()
+            packages = assets['packages']
+            scripts = assets['scripts']
+            
+            if self.logger:
+                self.logger.info(f"Found {len(packages)} .deb packages and {len(scripts)} scripts")
+            
+            # Prepare packages
+            if packages:
+                packages_dir = self.cache_dir / "packages"
+                packages_dir.mkdir(parents=True, exist_ok=True)
+                
+                for package in packages:
+                    src_path = Path(package.path)
+                    dst_path = packages_dir / package.name
+                    shutil.copy2(src_path, dst_path)
+                    if self.logger:
+                        self.logger.info(f"Copied {package.name} (MD5: {package.md5[:8]}...)")
+            
+            # Prepare scripts
+            if scripts:
+                scripts_dir = self.cache_dir / "scripts"
+                scripts_dir.mkdir(parents=True, exist_ok=True)
+                
+                for script in scripts:
+                    src_path = Path(script.path)
+                    dst_path = scripts_dir / script.name
+                    shutil.copy2(src_path, dst_path)
+                    # Make script executable
+                    dst_path.chmod(0o755)
+                    if self.logger:
+                        self.logger.info(f"Copied {script.name} (SHA256: {script.sha256[:8]}...)")
+            
+            # Update configuration with discovered ISO file
+            if assets['iso_files']:
+                base_iso = assets['iso_files'][0]  # Use first ISO found
+                # Update config with base ISO path
+                self.config.base_iso_path = str(base_iso.path)
+                self.config.base_iso_checksum = base_iso.sha256
+                if self.logger:
+                    self.logger.info(f"Found base ISO: {base_iso.name} (SHA256: {base_iso.sha256[:16]}...)")
+            
+            # Save asset manifest for verification
+            manifest_path = scanner.save_asset_manifest()
+            if self.logger:
+                self.logger.info(f"Asset manifest saved: {manifest_path}")
+            
+            phase_duration = time.time() - phase_start
+            self.phase_timings['asset_scanning'] = phase_duration
+            
+            if self.build_logger:
+                self.build_logger.log_phase_end("asset_scanning", True, phase_duration)
+            if self.logger:
+                self.logger.info("Asset scanning and preparation completed")
+                
+        except Exception as e:
+            phase_duration = time.time() - phase_start
+            if self.build_logger:
+                self.build_logger.log_phase_end("asset_scanning", False, phase_duration)
+            if self.logger:
+                self.logger.error(f"Asset scanning failed: {e}")
+            raise
+
+    def prepare_local_assets(self) -> None:
+        """Prepare local packages and scripts by copying to cache directories."""
+        if not self.config:
+            raise ValueError("Configuration not loaded")
+        
+        phase_start = time.time()
+        if self.build_logger:
+            self.build_logger.log_phase_start("asset_preparation")
+        
+        if self.logger:
+            self.logger.info("Preparing local assets...")
+        
+        try:
+            import shutil
+            
+            # Prepare local .deb packages
+            if self.config.packages.deb_local_paths:
+                packages_dir = self.cache_dir / "packages"
+                packages_dir.mkdir(parents=True, exist_ok=True)
+                
+                if self.logger:
+                    self.logger.info(f"Copying {len(self.config.packages.deb_local_paths)} local .deb packages...")
+                
+                for local_path in self.config.packages.deb_local_paths:
+                    src_path = Path(local_path)
+                    dst_path = packages_dir / src_path.name
+                    shutil.copy2(src_path, dst_path)
+                    if self.logger:
+                        self.logger.info(f"Copied {src_path.name} to cache")
+            
+            # Prepare local scripts
+            local_scripts = [s for s in self.config.first_boot.scripts if s.local_path]
+            if local_scripts:
+                scripts_dir = self.cache_dir / "scripts"
+                scripts_dir.mkdir(parents=True, exist_ok=True)
+                
+                if self.logger:
+                    self.logger.info(f"Copying {len(local_scripts)} local scripts...")
+                
+                for script in local_scripts:
+                    src_path = Path(script.local_path)
+                    dst_path = scripts_dir / src_path.name
+                    shutil.copy2(src_path, dst_path)
+                    # Make script executable
+                    dst_path.chmod(0o755)
+                    if self.logger:
+                        self.logger.info(f"Copied {src_path.name} to cache")
+            
+            phase_duration = time.time() - phase_start
+            self.phase_timings['asset_preparation'] = phase_duration
+            
+            if self.build_logger:
+                self.build_logger.log_phase_end("asset_preparation", True, phase_duration)
+            if self.logger:
+                self.logger.info("Local asset preparation completed")
+                
+        except Exception as e:
+            phase_duration = time.time() - phase_start
+            if self.build_logger:
+                self.build_logger.log_phase_end("asset_preparation", False, phase_duration)
+            if self.logger:
+                self.logger.error(f"Local asset preparation failed: {e}")
+            raise
+    
     def generate_autoinstall_config(self) -> Path:
         """Generate Ubuntu autoinstall configuration.
         
@@ -299,9 +443,21 @@ class FAIBuilder:
             "-f",  # Force overwrite
             "-g",  # Use GRUB
             "-B", str(fai_config_dir),  # Base configuration directory
-            "-M", "http://archive.ubuntu.com/ubuntu",  # Mirror URL
-            str(iso_output)
         ]
+        
+        # Add base ISO or mirror URL
+        if self.config.base_iso_path:
+            # Use local ISO file
+            fai_cmd.extend(["-S", str(self.config.base_iso_path)])
+            if self.logger:
+                self.logger.info(f"Using local base ISO: {self.config.base_iso_path}")
+        else:
+            # Use mirror URL for online build
+            fai_cmd.extend(["-M", "http://archive.ubuntu.com/ubuntu"])
+            if self.logger:
+                self.logger.info("Using online mirror for base system")
+        
+        fai_cmd.append(str(iso_output))
         
         try:
             if self.logger:
@@ -355,12 +511,14 @@ class FAIBuilder:
             self.logger.info("Cleaning up temporary files...")
         # Additional cleanup logic can be added here
     
-    def build(self, skip_downloads: bool = False, skip_fai: bool = False) -> Path:
+    def build(self, skip_downloads: bool = False, skip_fai: bool = False, use_local_assets: bool = False, scan_assets: bool = False) -> Path:
         """Execute complete build process.
         
         Args:
             skip_downloads: Skip asset downloads
             skip_fai: Skip FAI build (generate configs only)
+            use_local_assets: Use local assets instead of downloading
+            scan_assets: Automatically scan ./local_assets/ directory for assets
             
         Returns:
             Path to generated ISO file (if FAI build is executed)
@@ -371,8 +529,12 @@ class FAIBuilder:
             # Load and validate configuration
             self.load_and_validate_config()
             
-            # Download assets
-            if not skip_downloads:
+            # Handle assets
+            if scan_assets:
+                self.scan_and_prepare_local_assets()
+            elif use_local_assets:
+                self.prepare_local_assets()
+            elif not skip_downloads:
                 self.download_assets()
             else:
                 if self.logger:
@@ -468,6 +630,18 @@ Examples:
     )
     
     parser.add_argument(
+        "--use-local-assets",
+        action="store_true",
+        help="Use local assets instead of downloading (requires local file paths in config)"
+    )
+    
+    parser.add_argument(
+        "--scan-assets",
+        action="store_true",
+        help="Automatically scan ./local_assets/ directory for .deb files and scripts"
+    )
+    
+    parser.add_argument(
         "--skip-fai",
         action="store_true",
         help="Skip FAI build process (generate configs only)"
@@ -500,7 +674,9 @@ Examples:
         # Execute build
         result_path = builder.build(
             skip_downloads=args.skip_downloads,
-            skip_fai=args.skip_fai
+            skip_fai=args.skip_fai,
+            use_local_assets=args.use_local_assets,
+            scan_assets=args.scan_assets
         )
         
         # Calculate total build time

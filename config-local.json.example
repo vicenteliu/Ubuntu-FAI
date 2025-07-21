@@ -1,0 +1,117 @@
+{
+  "_comment": "Ubuntu FAI Build System Configuration - Local Assets Example",
+  "_description": "Example configuration using local .deb files and scripts instead of downloading",
+  "_version": "1.0",
+
+  "hardware": {
+    "_comment": "Hardware-specific configuration for FAI class selection",
+    "vendor": "dell",
+    "target_ssd": true,
+    "disk_size_min_gb": null
+  },
+
+  "encryption": {
+    "_comment": "LUKS full-disk encryption configuration",
+    "enabled": true,
+    "passphrase": "MySecureP@ssw0rd123!",
+    "cipher": "aes-xts-plain64",
+    "key_size": 256
+  },
+
+  "packages": {
+    "_comment": "Software packages to install during system setup",
+    "apt_packages": [
+      "curl",
+      "wget", 
+      "git",
+      "vim",
+      "htop",
+      "build-essential",
+      "python3-pip",
+      "docker.io",
+      "firefox",
+      "libreoffice"
+    ],
+    "_apt_packages_note": "Standard Ubuntu repository packages",
+    
+    "deb_urls": [],
+    "_deb_urls_note": "URLs disabled when using local files",
+    
+    "deb_local_paths": [
+      "./local_assets/packages/google-chrome-stable_current_amd64.deb",
+      "./local_assets/packages/code_1.84.2-1699528352_amd64.deb"
+    ],
+    "_deb_local_paths_note": "Local .deb files to be copied and installed",
+    
+    "deb_target_dir": "/opt/packages",
+    "_deb_target_dir_note": "Directory where .deb files will be placed in target system",
+    
+    "snap_packages": [
+      "discord",
+      "slack"
+    ]
+  },
+
+  "user": {
+    "_comment": "Primary user account configuration",
+    "username": "ubuntu",
+    "full_name": "System Administrator",
+    "password": "SecureUserP@ss123!",
+    "ssh_authorized_keys": [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKqP7j8Qv0hBJ7rMN3bNGkGl9L8FhZ7x admin@workstation"
+    ],
+    "sudo_nopasswd": false
+  },
+
+  "first_boot": {
+    "_comment": "First-boot script execution configuration",
+    "enabled": true,
+    "scripts": [
+      {
+        "local_path": "./local_assets/scripts/system-setup.sh",
+        "type": "automated",
+        "checksum": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3"
+      },
+      {
+        "local_path": "./local_assets/scripts/user-config.sh", 
+        "type": "automated",
+        "checksum": null
+      }
+    ],
+    "_scripts_note": "Using local scripts instead of URLs",
+    "scripts_target_dir": "/opt/scripts",
+    "_scripts_target_dir_note": "Directory where scripts will be placed in target system",
+    "timeout_seconds": 1800
+  },
+
+  "network": {
+    "_comment": "Network configuration settings",
+    "dhcp": true,
+    "hostname": "ubuntu-fai-desktop"
+  },
+
+  "iso_label": "Ubuntu-24.04-FAI-Local",
+  "iso_filename": null,
+
+  "_build_instructions": {
+    "setup": [
+      "1. Create local_assets directory structure:",
+      "   mkdir -p local_assets/{packages,scripts}",
+      "2. Place your .deb files in local_assets/packages/",
+      "3. Place your scripts in local_assets/scripts/",
+      "4. Run build with: python build.py --use-local-assets config-local.json.example"
+    ],
+    "example_structure": {
+      "local_assets/": {
+        "packages/": [
+          "google-chrome-stable_current_amd64.deb",
+          "code_1.84.2-1699528352_amd64.deb"
+        ],
+        "scripts/": [
+          "system-setup.sh",
+          "user-config.sh"
+        ]
+      }
+    }
+  }
+}

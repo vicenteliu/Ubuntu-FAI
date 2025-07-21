@@ -14,6 +14,8 @@ VENV_PATH="$SCRIPT_DIR/$VENV_NAME"
 CONFIG_FILE=""
 SKIP_DOWNLOADS=false
 SKIP_FAI=false
+USE_LOCAL_ASSETS=false
+SCAN_ASSETS=false
 DEBUG=false
 HELP=false
 
@@ -44,6 +46,8 @@ Ubuntu FAI Build System - 构建运行脚本
 选项:
   --skip-downloads    跳过资源下载阶段
   --skip-fai         跳过 FAI ISO 构建阶段
+  --use-local-assets  使用本地资源而非下载
+  --scan-assets      自动扫描 ./local_assets/ 目录中的文件
   --debug            启用调试模式
   --help             显示此帮助信息
 
@@ -54,6 +58,8 @@ Ubuntu FAI Build System - 构建运行脚本
   $0 config.json.example
   $0 --skip-downloads config.json.example
   $0 --debug --skip-fai config.json.example
+  $0 --use-local-assets config-local.json.example
+  $0 --scan-assets config.json.example
 
 注意:
   - 请确保已经运行 ./setup-venv.sh 创建虚拟环境
@@ -72,6 +78,14 @@ parse_arguments() {
                 ;;
             --skip-fai)
                 SKIP_FAI=true
+                shift
+                ;;
+            --use-local-assets)
+                USE_LOCAL_ASSETS=true
+                shift
+                ;;
+            --scan-assets)
+                SCAN_ASSETS=true
                 shift
                 ;;
             --debug)
@@ -190,6 +204,14 @@ build_build_args() {
 
     if [[ "$SKIP_FAI" == true ]]; then
         args+=("--skip-fai")
+    fi
+    
+    if [[ "$USE_LOCAL_ASSETS" == true ]]; then
+        args+=("--use-local-assets")
+    fi
+    
+    if [[ "$SCAN_ASSETS" == true ]]; then
+        args+=("--scan-assets")
     fi
     
     if [[ "$DEBUG" == true ]]; then

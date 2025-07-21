@@ -138,6 +138,14 @@ class PackageConfig(BaseModel):
         default_factory=list,
         description="URLs to .deb packages for direct download"
     )
+    deb_local_paths: List[str] = Field(
+        default_factory=list,
+        description="Local paths to .deb packages"
+    )
+    deb_target_dir: str = Field(
+        default="/opt/packages",
+        description="Directory where .deb files will be placed in target system"
+    )
     snap_packages: List[str] = Field(
         default_factory=list,
         description="Snap packages to install"
@@ -177,6 +185,20 @@ class PackageConfig(BaseModel):
                     warnings.warn(f"URL may not point to .deb file, will verify during download: {url}")
             except Exception as e:
                 raise ValueError(f"Invalid .deb URL {url}: {e}")
+        return v
+    
+    @field_validator('deb_local_paths')
+    @classmethod
+    def validate_deb_local_paths(cls, v: List[str]) -> List[str]:
+        """Validate local .deb package paths."""
+        for path_str in v:
+            path = Path(path_str)
+            if not path.exists():
+                raise ValueError(f"Local .deb file not found: {path_str}")
+            if not path.is_file():
+                raise ValueError(f"Local .deb path is not a file: {path_str}")
+            if not path.suffix == '.deb':
+                raise ValueError(f"File is not a .deb package: {path_str}")
         return v
 
 
@@ -249,8 +271,13 @@ class FirstBootScript(BaseModel):
         extra="ignore"
     )
     
-    url: str = Field(
+    url: Optional[str] = Field(
+        default=None,
         description="URL to download the script from"
+    )
+    local_path: Optional[str] = Field(
+        default=None,
+        description="Local path to the script file"
     )
     type: ScriptType = Field(
         default=ScriptType.AUTOMATED,
@@ -263,8 +290,10 @@ class FirstBootScript(BaseModel):
     
     @field_validator('url')
     @classmethod
-    def validate_url(cls, v: str) -> str:
+    def validate_url(cls, v: Optional[str]) -> Optional[str]:
         """Validate script URL."""
+        if v is None:
+            return v
         try:
             parsed = urlparse(v)
             if not parsed.scheme in ('http', 'https'):
@@ -273,6 +302,19 @@ class FirstBootScript(BaseModel):
                 raise ValueError(f"Invalid URL format: {v}")
         except Exception as e:
             raise ValueError(f"Invalid script URL {v}: {e}")
+        return v
+    
+    @field_validator('local_path')
+    @classmethod
+    def validate_local_path(cls, v: Optional[str]) -> Optional[str]:
+        """Validate local script path."""
+        if v is None:
+            return v
+        path = Path(v)
+        if not path.exists():
+            raise ValueError(f"Local script file not found: {v}")
+        if not path.is_file():
+            raise ValueError(f"Local script path is not a file: {v}")
         return v
     
     @field_validator('checksum')
@@ -284,6 +326,15 @@ class FirstBootScript(BaseModel):
                 raise ValueError("Checksum must be a valid 64-character SHA256 hash")
             return v.lower()
         return v
+    
+    @model_validator(mode='after')
+    def validate_script_source(self) -> 'FirstBootScript':
+        """Validate that script has either URL or local path."""
+        if not self.url and not self.local_path:
+            raise ValueError("Script must have either 'url' or 'local_path' specified")
+        if self.url and self.local_path:
+            raise ValueError("Script cannot have both 'url' and 'local_path' specified")
+        return self
 
 
 class FirstBootConfig(BaseModel):
@@ -308,6 +359,10 @@ class FirstBootConfig(BaseModel):
         ge=60,
         le=7200,
         description="Maximum execution time for all scripts"
+    )
+    scripts_target_dir: str = Field(
+        default="/opt/scripts",
+        description="Directory where scripts will be placed in target system"
     )
 
 
@@ -378,6 +433,20 @@ class BuildConfig(BaseModel):
         description="Custom ISO filename (auto-generated if None)"
     )
     
+    # Base ISO configuration
+    base_iso_path: Optional[str] = Field(
+        default=None,
+        description="Path to local Ubuntu base ISO file (optional)"
+    )
+    base_iso_url: Optional[str] = Field(
+        default="http://releases.ubuntu.com/24.04/ubuntu-24.04.1-desktop-amd64.iso",
+        description="URL to download Ubuntu base ISO (used if base_iso_path not specified)"
+    )
+    base_iso_checksum: Optional[str] = Field(
+        default=None,
+        description="SHA256 checksum of base ISO for verification"
+    )
+    
     @model_validator(mode='after')
     def validate_config_consistency(self) -> 'BuildConfig':
         """Validate cross-field configuration consistency."""
@@ -394,6 +463,17 @@ class BuildConfig(BaseModel):
             # Dell-specific LUKS compatibility check
             if self.encryption.key_size > 256:
                 raise ValueError("Dell hardware may have issues with key sizes > 256 bits")
+        
+        # Base ISO validation
+        if self.base_iso_path:
+            from pathlib import Path
+            iso_path = Path(self.base_iso_path)
+            if not iso_path.exists():
+                raise ValueError(f"Base ISO file not found: {self.base_iso_path}")
+            if not iso_path.is_file():
+                raise ValueError(f"Base ISO path is not a file: {self.base_iso_path}")
+            if iso_path.suffix.lower() != '.iso':
+                raise ValueError(f"Base ISO file must have .iso extension: {self.base_iso_path}")
         
         return self
     
