@@ -299,7 +299,7 @@ class FAIBuilder:
             "-f",  # Force overwrite
             "-g",  # Use GRUB
             "-B", str(fai_config_dir),  # Base configuration directory
-            "-M",  # Mirror
+            "-M", "http://archive.ubuntu.com/ubuntu",  # Mirror URL
             str(iso_output)
         ]
         
