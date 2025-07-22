@@ -437,28 +437,34 @@ class FAIBuilder:
         
         iso_output = self.output_dir / f"ubuntu-{self.config.hardware.vendor.lower()}-custom.iso"
         
-        # FAI build command
-        fai_cmd = [
-            "fai-cd",
-            "-f",  # Force overwrite
-            "-g",  # Use GRUB
-            "-B", str(fai_config_dir),  # Base configuration directory
-        ]
+        # Create temporary mirror directory for FAI
+        import os
+        temp_mirror_dir = "/tmp/ubuntu-fai-mirror"
+        os.makedirs(temp_mirror_dir, exist_ok=True)
         
-        # Add base ISO or mirror URL  
+        # FAI build command with proper parameter order
         if self.config.base_iso_path:
-            # Use local ISO file with temporary mirror directory
-            import os
-            temp_mirror_dir = "/tmp/ubuntu-fai-mirror"
-            os.makedirs(temp_mirror_dir, exist_ok=True)
-            fai_cmd.extend(["-S", str(self.config.base_iso_path)])
-            fai_cmd.extend(["-m", temp_mirror_dir])
+            # Use local ISO file 
+            fai_cmd = [
+                "fai-cd",
+                "-f",  # Force overwrite
+                "-g",  # Use GRUB
+                "-m", temp_mirror_dir,  # Mirror directory (must come early)
+                "-B", str(fai_config_dir),  # Base configuration directory
+                "-S", str(self.config.base_iso_path)  # Source ISO
+            ]
             if self.logger:
                 self.logger.info(f"Using local base ISO: {self.config.base_iso_path}")
                 self.logger.info(f"Using temporary mirror directory: {temp_mirror_dir}")
         else:
             # Use mirror URL for online build
-            fai_cmd.extend(["-M", "http://archive.ubuntu.com/ubuntu"])
+            fai_cmd = [
+                "fai-cd", 
+                "-f",  # Force overwrite
+                "-g",  # Use GRUB
+                "-B", str(fai_config_dir),  # Base configuration directory
+                "-M", "http://archive.ubuntu.com/ubuntu"  # Mirror URL
+            ]
             if self.logger:
                 self.logger.info("Using online mirror for base system")
         
