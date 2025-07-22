@@ -447,10 +447,12 @@ class FAIBuilder:
         
         # Add base ISO or mirror URL
         if self.config.base_iso_path:
-            # Use local ISO file
+            # Use local ISO file with mirror directory
             fai_cmd.extend(["-S", str(self.config.base_iso_path)])
+            fai_cmd.extend(["-m", "http://archive.ubuntu.com/ubuntu"])
             if self.logger:
                 self.logger.info(f"Using local base ISO: {self.config.base_iso_path}")
+                self.logger.info("Using mirror for package updates: http://archive.ubuntu.com/ubuntu")
         else:
             # Use mirror URL for online build
             fai_cmd.extend(["-M", "http://archive.ubuntu.com/ubuntu"])
