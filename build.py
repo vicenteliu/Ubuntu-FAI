@@ -442,16 +442,15 @@ class FAIBuilder:
         temp_mirror_dir = "/tmp/ubuntu-fai-mirror"
         os.makedirs(temp_mirror_dir, exist_ok=True)
         
-        # FAI build command with proper parameter order
+        # FAI build command with correct syntax
         if self.config.base_iso_path:
-            # Use local ISO file 
+            # Use local ISO file with mirror directory
             fai_cmd = [
                 "fai-cd",
                 "-f",  # Force overwrite
                 "-g",  # Use GRUB
-                "-m", temp_mirror_dir,  # Mirror directory (must come early)
                 "-B", str(fai_config_dir),  # Base configuration directory
-                "-S", str(self.config.base_iso_path)  # Source ISO
+                "-m", temp_mirror_dir  # Mirror directory
             ]
             if self.logger:
                 self.logger.info(f"Using local base ISO: {self.config.base_iso_path}")
