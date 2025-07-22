@@ -437,37 +437,57 @@ class FAIBuilder:
         
         iso_output = self.output_dir / f"ubuntu-{self.config.hardware.vendor.lower()}-custom.iso"
         
-        # Create temporary mirror directory for FAI
+        # Find suitable mirror directory for FAI
         import os
-        temp_mirror_dir = "/tmp/ubuntu-fai-mirror"
-        os.makedirs(temp_mirror_dir, exist_ok=True)
         
-        # FAI build command with correct syntax
+        # Try to find existing apt cache or create minimal mirror structure
+        mirror_candidates = [
+            "/var/cache/apt/archives",  # System apt cache
+            "/tmp/ubuntu-fai-mirror"    # Fallback temporary directory
+        ]
+        
+        mirror_dir = None
+        for candidate in mirror_candidates:
+            if os.path.exists(candidate) and os.path.isdir(candidate):
+                mirror_dir = candidate
+                break
+        
+        if not mirror_dir:
+            # Create minimal mirror directory structure
+            mirror_dir = "/tmp/ubuntu-fai-mirror"
+            os.makedirs(f"{mirror_dir}/dists/noble/main/binary-amd64", exist_ok=True)
+            os.makedirs(f"{mirror_dir}/pool/main", exist_ok=True)
+            # Create minimal Packages file
+            with open(f"{mirror_dir}/dists/noble/main/binary-amd64/Packages", "w") as f:
+                f.write("# Minimal packages file for FAI\n")
+        
+        # FAI build command with proper syntax
         if self.config.base_iso_path:
-            # Use local ISO file with mirror directory
+            # For local ISO builds, try using fai-diskimage instead of fai-cd
+            # as it's more suitable for custom ISO creation
             fai_cmd = [
-                "fai-cd",
-                "-f",  # Force overwrite
-                "-g",  # Use GRUB
-                "-B", str(fai_config_dir),  # Base configuration directory
-                "-m", temp_mirror_dir  # Mirror directory
+                "fai-diskimage",
+                "-v",  # Verbose
+                "-u", str(self.config.base_iso_path),  # Base image
+                "-s", "10G",  # Size
+                "-c", str(fai_config_dir),  # FAI config space
+                str(iso_output)  # Output file
             ]
             if self.logger:
-                self.logger.info(f"Using local base ISO: {self.config.base_iso_path}")
-                self.logger.info(f"Using temporary mirror directory: {temp_mirror_dir}")
+                self.logger.info(f"Using fai-diskimage with local base ISO: {self.config.base_iso_path}")
+                self.logger.info(f"Creating disk image: {iso_output}")
         else:
-            # Use mirror URL for online build
+            # Use mirror URL for online build with fai-cd
             fai_cmd = [
                 "fai-cd", 
                 "-f",  # Force overwrite
                 "-g",  # Use GRUB
                 "-B", str(fai_config_dir),  # Base configuration directory
-                "-M", "http://archive.ubuntu.com/ubuntu"  # Mirror URL
+                "-M", "http://archive.ubuntu.com/ubuntu",  # Mirror URL
+                str(iso_output)
             ]
             if self.logger:
-                self.logger.info("Using online mirror for base system")
-        
-        fai_cmd.append(str(iso_output))
+                self.logger.info("Using fai-cd with online mirror")
         
         try:
             if self.logger:
