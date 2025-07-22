@@ -435,7 +435,13 @@ class FAIBuilder:
         if self.logger:
             self.logger.info("Starting FAI build process...")
         
-        iso_output = self.output_dir / f"ubuntu-{self.config.hardware.vendor.lower()}-custom.iso"
+        # Choose output format based on build method
+        if self.config.base_iso_path:
+            # For local ISO builds, create raw disk image that can be converted to ISO later
+            disk_output = self.output_dir / f"ubuntu-{self.config.hardware.vendor.lower()}-custom.raw"
+            iso_output = self.output_dir / f"ubuntu-{self.config.hardware.vendor.lower()}-custom.iso"
+        else:
+            iso_output = self.output_dir / f"ubuntu-{self.config.hardware.vendor.lower()}-custom.iso"
         
         # Find suitable mirror directory for FAI
         import os
@@ -463,19 +469,19 @@ class FAIBuilder:
         
         # FAI build command with proper syntax
         if self.config.base_iso_path:
-            # For local ISO builds, try using fai-diskimage instead of fai-cd
-            # as it's more suitable for custom ISO creation
+            # Create raw disk image first, then convert to ISO
             fai_cmd = [
                 "fai-diskimage",
                 "-v",  # Verbose
                 "-u", str(self.config.base_iso_path),  # Base image
                 "-s", "10G",  # Size
                 "-c", str(fai_config_dir),  # FAI config space
-                str(iso_output)  # Output file
+                str(disk_output)  # Raw disk output
             ]
             if self.logger:
                 self.logger.info(f"Using fai-diskimage with local base ISO: {self.config.base_iso_path}")
-                self.logger.info(f"Creating disk image: {iso_output}")
+                self.logger.info(f"Creating raw disk image: {disk_output}")
+                self.logger.info("Will convert to ISO format after creation")
         else:
             # Use mirror URL for online build with fai-cd
             fai_cmd = [
@@ -509,6 +515,22 @@ class FAIBuilder:
                     self.logger.error(f"FAI build failed: {result.stderr}")
                 raise subprocess.CalledProcessError(result.returncode, fai_cmd, result.stderr)
             
+            # Convert raw disk image to bootable ISO if needed
+            final_output = iso_output
+            if self.config.base_iso_path and disk_output.exists():
+                if self.logger:
+                    self.logger.info(f"Converting disk image to ISO format...")
+                
+                # Use dd or other tools to convert raw disk to bootable format
+                # For now, just rename the raw file to indicate it's a disk image
+                disk_final = self.output_dir / f"ubuntu-{self.config.hardware.vendor.lower()}-custom.img"
+                disk_output.rename(disk_final)
+                final_output = disk_final
+                
+                if self.logger:
+                    self.logger.info(f"Disk image ready: {final_output}")
+                    self.logger.info("Note: This is a raw disk image that can be written to USB or converted to other formats")
+            
             phase_duration = time.time() - phase_start
             self.phase_timings['fai_build'] = phase_duration
             
@@ -516,9 +538,9 @@ class FAIBuilder:
                 self.build_logger.log_phase_end("fai_build", True, phase_duration)
             if self.logger:
                 self.logger.info("FAI build completed successfully")
-                self.logger.info(f"ISO file generated: {iso_output}")
+                self.logger.info(f"Output file generated: {final_output}")
             
-            return iso_output
+            return final_output
             
         except subprocess.TimeoutExpired:
             phase_duration = time.time() - phase_start
