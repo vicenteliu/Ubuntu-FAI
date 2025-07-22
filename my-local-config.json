@@ -1,0 +1,84 @@
+{
+  "hardware": {
+    "vendor": "generic",
+    "target_ssd": true,
+    "disk_size_min_gb": null
+  },
+  "encryption": {
+    "enabled": true,
+    "passphrase": "SecureEncryption@Pass123!",
+    "cipher": "aes-xts-plain64",
+    "key_size": 256,
+    "hash_algorithm": "sha256"
+  },
+  "packages": {
+    "apt_packages": [
+      "curl",
+      "wget",
+      "git",
+      "vim",
+      "htop",
+      "tree",
+      "python3",
+      "python3-pip"
+    ],
+    "deb_local_paths": [
+      "local_assets/packages/FeiLian_Linux_amd64_v3.0.21_r5116_0b888e.deb",
+      "local_assets/packages/Feishu-linux_x64-7.36.11.deb",
+      "local_assets/packages/LinuxPuppet-628-new.deb",
+      "local_assets/packages/google-chrome-stable_current_amd64.deb",
+      "local_assets/packages/SentinelAgent_linux_x86_64_v24_2_2_20.deb",
+      "local_assets/packages/SealSuite_Linux_amd64_v3.0.21_r5120_27fa69.deb",
+      "local_assets/packages/Lark-linux_x64-7.36.11.deb"
+    ],
+    "deb_target_dir": "/opt/packages",
+    "snap_packages": []
+  },
+  "user": {
+    "username": "ubuntu",
+    "full_name": "Ubuntu User",
+    "password": "UbuntuUser@Pass123!",
+    "ssh_authorized_keys": [],
+    "sudo_nopasswd": false
+  },
+  "first_boot": {
+    "enabled": true,
+    "scripts": [
+      {
+        "local_path": "local_assets/scripts/main.py",
+        "type": "automated",
+        "checksum": "e476c48039ffd4c792ecb8a128d31833466dcc139b1a6e3ed11edaaf5cf7c997"
+      },
+      {
+        "local_path": "local_assets/scripts/start.sh",
+        "type": "automated",
+        "checksum": "13bb7968af4fea2dbb6fcfbb87db8058f8fc904caf3bf52863ca07cbb7cfd1c3"
+      },
+      {
+        "local_path": "local_assets/scripts/apps_install.py",
+        "type": "automated",
+        "checksum": "6e0a878ad2bfcf2e2204e713c5d5c937d10fb62b31f2272317aea6d66c0988df"
+      },
+      {
+        "local_path": "local_assets/scripts/system_info.py",
+        "type": "automated",
+        "checksum": "c99baa0bac8de5d377988feb25c160bce921d87349658a3ba4521dac037d090c"
+      },
+      {
+        "local_path": "local_assets/scripts/encrypt_disk.py",
+        "type": "automated",
+        "checksum": "492a1342f895ffdccdb6a5dce97a57fdeb851b89ef27d4694a94594d1ecc25a4"
+      }
+    ],
+    "scripts_target_dir": "/opt/scripts",
+    "timeout_seconds": 1800
+  },
+  "network": {
+    "hostname": "ubuntu-custom-build"
+  },
+  "iso_label": "Ubuntu-24.04-CustomBuild",
+  "iso_filename": null,
+  "base_iso_path": "local_assets/iso/ubuntu-24.04.2-desktop-amd64.iso",
+  "base_iso_url": null,
+  "base_iso_checksum": "d7fe3d6a0419667d2f8eff12796996328daa2d4f90cd9f87aa9371b362f987bf"
+}

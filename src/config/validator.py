@@ -388,10 +388,16 @@ def _validate_first_boot_scripts(config: BuildConfig) -> None:
                     )
                 break
     
-    # Validate script URLs uniqueness
-    script_urls = [script.url for script in config.first_boot.scripts]
-    if len(script_urls) != len(set(script_urls)):
-        raise ConfigValidationError("Duplicate script URLs detected in first_boot configuration")
+    # Validate script URLs and paths uniqueness
+    script_identifiers = []
+    for script in config.first_boot.scripts:
+        if script.url:
+            script_identifiers.append(('url', script.url))
+        elif script.local_path:
+            script_identifiers.append(('local_path', script.local_path))
+    
+    if len(script_identifiers) != len(set(script_identifiers)):
+        raise ConfigValidationError("Duplicate script URLs/paths detected in first_boot configuration")
     
     # Validate timeout for script count
     script_count = len(config.first_boot.scripts)
